@@ -1,0 +1,19 @@
+{
+  "name": "bazi-deepseek-proxy",
+  "version": "1.0.0",
+  "description": "Backend proxy for DeepSeek API integration",
+  "main": "deepseek-proxy.js",
+  "scripts": {
+    "start": "node deepseek-proxy.js",
+    "dev": "nodemon deepseek-proxy.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
+

@@ -1,0 +1,163 @@
+<template>
+  <view class="u-p-y-30 u-p-x-20">
+    <yx-sheet :margin="[0, 0]" :round="3" :shadow="2">
+      <view v-if="!interpretation && !loading">
+        <view class="u-flex u-row-center">
+          <u-image :height="400" :src="getUrl(`static/icon/other/coding.svg`)" :width="400"
+                   class="u-m-t-40 u-m-b-30"></u-image>
+        </view>
+        <u-button :loading="loading" class="u-m-b-30" type="primary" @click="getInterpretation">
+          AI 智能解读
+        </u-button>
+        <view class="u-font-24 u-type-info u-text-center u-m-b-20">
+          <text>使用 DeepSeek AI 进行专业命理解读</text>
+        </view>
+      </view>
+      
+      <view v-if="loading" class="u-p-y-40">
+        <u-loading-icon mode="spinner" size="40"></u-loading-icon>
+        <view class="u-text-center u-m-t-20 u-font-26 u-type-info">AI 正在分析中，请稍候...</view>
+      </view>
+      
+      <view v-if="interpretation && !loading" class="interpretation-content">
+        <view class="u-flex u-row-center u-m-b-30">
+          <text class="yx-text-weight-b u-font-32">AI 智能解读</text>
+        </view>
+        <view class="u-font-28 u-line-height-2" decode>{{ interpretation }}</view>
+        <view class="u-m-t-30 u-flex u-row-center">
+          <u-button size="small" type="primary" @click="getInterpretation">重新解读</u-button>
+        </view>
+      </view>
+      
+      <view v-if="error" class="u-m-t-20">
+        <u-alert :title="error" type="error" :show-icon="true"></u-alert>
+        <u-button class="u-m-t-20" size="small" type="primary" @click="getInterpretation">重试</u-button>
+      </view>
+    </yx-sheet>
+  </view>
+</template>
+
+<script setup>
+import {ref} from 'vue';
+import {interpretBaziWithDeepSeek} from '@/api/deepseek';
+import {getUrl} from "@/utils/file";
+import {useDetailStore} from "@/store/detail";
+
+const detailStore = useDetailStore();
+const interpretation = ref('');
+const loading = ref(false);
+const error = ref('');
+
+// Get DeepSeek API key from environment or config
+// In production, this should be stored securely on the backend
+const getDeepSeekApiKey = () => {
+  // Option 1: Get from environment variable (for development)
+  // return import.meta.env.VITE_DEEPSEEK_API_KEY;
+  
+  // Option 2: Get from backend API (recommended for production)
+  // This keeps the API key secure on the server
+  return null; // Will need to implement backend endpoint
+};
+
+async function getInterpretation() {
+  if (!detailStore.timestamp) {
+    uni.$u.toast('请先进行排盘');
+    return;
+  }
+
+  loading.value = true;
+  error.value = '';
+  interpretation.value = '';
+
+  try {
+    // Get API key - in production, this should come from your backend
+    const apiKey = getDeepSeekApiKey();
+    
+    if (!apiKey) {
+      // If no API key, try to use backend endpoint
+      // This is the recommended approach for production
+      uni.showLoading({ title: '请求解读中...' });
+      
+      // Call your backend API which has the DeepSeek key
+      // Use the same API base as other endpoints
+      const APP_API = (import.meta.env.VITE_API_URL || "https://api.app.yxbug.cn") + "/api";
+      
+      uni.request({
+        url: APP_API + '/8char/deepseek-interpret',
+        method: 'POST',
+        data: {
+          ...detailStore.defaultPayload,
+          baziData: {
+            realname: detailStore.realname,
+            datetime: detailStore.datetime,
+            top: detailStore.top,
+            bottom: detailStore.bottom,
+            start: detailStore.start,
+            nayin: detailStore.nayin,
+            empty: detailStore.empty,
+            gods: detailStore.gods,
+            zodiac: detailStore.zodiac,
+            constellation: detailStore.constellation,
+            element: detailStore.element
+          }
+        },
+        header: {
+          'Content-Type': 'application/json'
+        },
+        success: (res) => {
+          uni.hideLoading();
+          if (res.statusCode === 200) {
+            // Handle both direct data and wrapped response
+            const result = res.data.data || res.data;
+            if (typeof result === 'string') {
+              interpretation.value = result;
+            } else if (result && result.interpretation) {
+              interpretation.value = result.interpretation;
+            } else {
+              error.value = '获取解读失败，请稍后重试';
+            }
+          } else {
+            error.value = res.data.msg || '获取解读失败，请稍后重试';
+          }
+        },
+        fail: (err) => {
+          uni.hideLoading();
+          error.value = '网络请求失败，请检查网络连接';
+          console.error('DeepSeek API request failed:', err);
+        }
+      });
+    } else {
+      // Direct API call (for development/testing only)
+      const baziData = {
+        realname: detailStore.realname,
+        datetime: detailStore.datetime,
+        top: detailStore.top,
+        bottom: detailStore.bottom,
+        start: detailStore.start,
+        nayin: detailStore.nayin,
+        empty: detailStore.empty,
+        gods: detailStore.gods,
+        zodiac: detailStore.zodiac,
+        constellation: detailStore.constellation,
+        element: detailStore.element
+      };
+      
+      const result = await interpretBaziWithDeepSeek(baziData, apiKey);
+      interpretation.value = result;
+    }
+  } catch (err) {
+    error.value = err.message || '获取AI解读失败，请稍后重试';
+    console.error('DeepSeek interpretation error:', err);
+  } finally {
+    loading.value = false;
+  }
+}
+</script>
+
+<style scoped>
+.interpretation-content {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+</style>
+
