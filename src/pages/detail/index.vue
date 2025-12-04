@@ -17,11 +17,9 @@
       width:'100%',
       height:contentHeight,
     }">
-      <detail v-if="tabsOption.current === 0"></detail>
-      <basic v-else-if="tabsOption.current === 1"></basic>
-      <major v-else-if="tabsOption.current === 2"></major>
-      <live v-else-if="tabsOption.current === 3"></live>
-      <ai-interpretation v-else-if="tabsOption.current === 4"></ai-interpretation>
+      <basic v-if="tabsOption.current === 0"></basic>
+      <major v-else-if="tabsOption.current === 1"></major>
+      <ai-interpretation v-else-if="tabsOption.current === 2"></ai-interpretation>
     </scroll-view>
   </view>
 </template>
@@ -30,8 +28,6 @@
 import {ref, reactive, onMounted, nextTick, computed} from 'vue';
 import HeaderView from './components/index/common/header/header.vue'
 import Basic from './components/index/basic/basic.vue'
-import Live from './components/index/live/live.vue'
-import Detail from './components/index/detail/detail.vue';
 import Major from './components/index/major/major.vue'
 import AiInterpretation from './components/index/ai-interpretation/ai-interpretation.vue'
 import {toHome} from "@/utils/router";
@@ -40,11 +36,9 @@ import {useDetailStore} from "@/store/detail";
 const detailStore = useDetailStore()
 const tabsOption = reactive({
   list: [
-    {key: 0, name: '命主信息',},
-    {key: 1, name: '基本命盘',},
-    {key: 2, name: '专业细盘',},
-    {key: 3, name: '在线批命',},
-    {key: 4, name: 'AI解读',}
+    {key: 0, name: '基本命盘',},
+    {key: 1, name: '专业细盘',},
+    {key: 2, name: 'AI解读',}
   ],
   current: 0
 });

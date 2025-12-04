@@ -1,7 +1,7 @@
-export const APP_AUTHOR = '阿轩的Bug';
-export const APP_NAME = '四柱易学';
-export const APP_SUB_NAME = '八字排盘工具';
-export const APP_DESCRIPTION = '专业命理师首选四柱排盘工具';
+export const APP_AUTHOR = '玄机老人';
+export const APP_NAME = '玄机阁命理分析';
+export const APP_SUB_NAME = 'AI命理分析';
+export const APP_DESCRIPTION = '传统命理与AI相结合的分析工具';
 export const APP_VERSION = '0.0.1';
 export const API_VERSION = "0.0.1";
 
