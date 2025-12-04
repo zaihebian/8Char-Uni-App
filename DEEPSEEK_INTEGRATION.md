@@ -195,3 +195,5 @@ The AI interpretation will provide detailed analysis in Chinese, covering:
 
 This integration follows the same license as the main project (GPL-3.0).
 
+
+

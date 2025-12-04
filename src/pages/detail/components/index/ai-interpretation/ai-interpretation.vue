@@ -15,8 +15,10 @@
       </view>
       
       <view v-if="loading" class="u-p-y-40">
-        <u-loading-icon mode="spinner" size="40"></u-loading-icon>
-        <view class="u-text-center u-m-t-20 u-font-26 u-type-info">AI 正在分析中，请稍候...</view>
+        <view class="u-flex u-row-center u-col-center">
+          <view class="loading-spinner u-m-r-20"></view>
+          <text class="u-font-26 u-type-info">AI 正在分析中，请稍候...</text>
+        </view>
       </view>
       
       <view v-if="interpretation && !loading" class="interpretation-content">
@@ -30,7 +32,9 @@
       </view>
       
       <view v-if="error" class="u-m-t-20">
-        <u-alert :title="error" type="error" :show-icon="true"></u-alert>
+        <view class="u-p-20 u-bg-error-light u-border-radius u-m-b-20">
+          <text class="u-font-26 u-type-error">{{ error }}</text>
+        </view>
         <u-button class="u-m-t-20" size="small" type="primary" @click="getInterpretation">重试</u-button>
       </view>
     </yx-sheet>
@@ -158,6 +162,20 @@ async function getInterpretation() {
 .interpretation-content {
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #2979ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>
 
