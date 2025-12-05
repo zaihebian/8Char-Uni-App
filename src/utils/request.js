@@ -1,4 +1,8 @@
-export const APP_API = (import.meta.env.VITE_API_URL||"https://api.app.yxbug.cn") + "/api"
+// Production API for BaZi calculation
+export const APP_API = "https://api.app.yxbug.cn/api"
+
+// Local backend API for DeepSeek (can be overridden by env)
+export const LOCAL_API = (import.meta.env.VITE_API_URL || "http://localhost:3000") + "/api"
 
 export const Post = (url, param, host) => {
 	return Request(url, "POST", param, host)

@@ -82,12 +82,11 @@ async function getInterpretation() {
       // This is the recommended approach for production
       uni.showLoading({ title: '请求解读中...' });
       
-      // Call your backend API which has the DeepSeek key
-      // Use the same API base as other endpoints
-      const APP_API = (import.meta.env.VITE_API_URL || "https://api.app.yxbug.cn") + "/api";
+      // Call local backend API which has the DeepSeek key
+      const LOCAL_API = (import.meta.env.VITE_API_URL || "http://localhost:3000") + "/api";
       
       uni.request({
-        url: APP_API + '/8char/deepseek-interpret',
+        url: LOCAL_API + '/8char/deepseek-interpret',
         method: 'POST',
         data: {
           ...detailStore.defaultPayload,
@@ -110,18 +109,49 @@ async function getInterpretation() {
         },
         success: (res) => {
           uni.hideLoading();
+          console.log('AI Interpretation Full Response:', JSON.stringify(res, null, 2));
+          console.log('Response statusCode:', res.statusCode);
+          console.log('Response data:', res.data);
+          console.log('Response data type:', typeof res.data);
+          
           if (res.statusCode === 200) {
-            // Handle both direct data and wrapped response
-            const result = res.data.data || res.data;
-            if (typeof result === 'string') {
+            // Backend returns: { data: "interpretation text" }
+            // uni.request wraps it, so we need to check res.data structure
+            let result = null;
+            
+            // Try different response formats
+            if (typeof res.data === 'string') {
+              // Direct string response
+              result = res.data;
+            } else if (res.data && res.data.data) {
+              // Wrapped format: { data: "text" }
+              result = res.data.data;
+            } else if (res.data && typeof res.data === 'object') {
+              // Check if it's already the text
+              if (Array.isArray(res.data)) {
+                console.error('Response is an array:', res.data);
+                error.value = '获取解读失败：服务器返回格式错误';
+                return;
+              }
+              // Try to find text in object
+              result = res.data.content || res.data.message || res.data.text || res.data.interpretation;
+            }
+            
+            console.log('Final result:', result);
+            console.log('Final result type:', typeof result);
+            console.log('Final result length:', result ? (typeof result === 'string' ? result.length : 'not string') : 'null/undefined');
+            
+            if (result && typeof result === 'string' && result.length > 0) {
               interpretation.value = result;
-            } else if (result && result.interpretation) {
-              interpretation.value = result.interpretation;
+              console.log('Successfully set interpretation, length:', result.length);
             } else {
-              error.value = '获取解读失败，请稍后重试';
+              error.value = `获取解读失败：响应为空或格式不正确 (类型: ${typeof result}, 值: ${JSON.stringify(result)})`;
+              console.error('Invalid result:', result);
+              console.error('Full response data for debugging:', JSON.stringify(res.data, null, 2));
             }
           } else {
-            error.value = res.data.msg || '获取解读失败，请稍后重试';
+            error.value = res.data?.msg || res.data?.error || `获取解读失败 (${res.statusCode})`;
+            console.error('API Error:', res.statusCode, res.data);
           }
         },
         fail: (err) => {

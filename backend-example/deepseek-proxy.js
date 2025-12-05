@@ -119,13 +119,20 @@ ${element.pro_decl && element.pro_decl.length > 0 ? `【五行分析】\n${eleme
 // DeepSeek interpretation endpoint
 app.post('/api/8char/deepseek-interpret', rateLimit, async (req, res) => {
   try {
+    console.log('Received request:', JSON.stringify(req.body, null, 2));
+    
     if (!process.env.DEEPSEEK_API_KEY) {
+      console.error('DeepSeek API key not configured');
       return res.status(500).json({ msg: 'DeepSeek API key not configured' });
     }
 
-    const { baziData } = req.body;
+    // Handle both direct baziData and wrapped format
+    const baziData = req.body.baziData || req.body;
     
-    if (!baziData) {
+    console.log('Extracted baziData:', baziData ? 'exists' : 'missing');
+    
+    if (!baziData || (!baziData.top && !baziData.datetime)) {
+      console.error('Invalid baziData:', baziData);
       return res.status(400).json({ msg: 'BaZi data is required' });
     }
 
@@ -173,19 +180,34 @@ app.post('/api/8char/deepseek-interpret', rateLimit, async (req, res) => {
       response.on('end', () => {
         try {
           const parsed = JSON.parse(data);
+          console.log('DeepSeek API Response Status:', response.statusCode);
+          console.log('DeepSeek API Response:', JSON.stringify(parsed, null, 2));
           
           if (response.statusCode === 200 && parsed.choices?.[0]?.message) {
-            res.json({ 
-              data: parsed.choices[0].message.content 
-            });
+            const interpretation = parsed.choices[0].message.content;
+            console.log('DeepSeek interpretation received, length:', interpretation ? interpretation.length : 0);
+            console.log('Sending to frontend:', { data: interpretation });
+            
+            if (!interpretation || interpretation.length === 0) {
+              console.error('Interpretation is empty!');
+              res.status(500).json({ 
+                msg: 'DeepSeek returned empty interpretation' 
+              });
+            } else {
+              res.json({ 
+                data: interpretation 
+              });
+            }
           } else {
             console.error('DeepSeek API Error:', parsed);
             res.status(500).json({ 
-              msg: parsed.error?.message || 'DeepSeek API error' 
+              msg: parsed.error?.message || 'DeepSeek API error',
+              error: parsed.error 
             });
           }
         } catch (e) {
           console.error('Parse error:', e);
+          console.error('Raw response data:', data);
           res.status(500).json({ msg: 'Failed to parse DeepSeek response' });
         }
       });

@@ -6,3 +6,42 @@
 yarn.lock
 package-lock.json
 pnpm-lock.yaml
+
+# Environment variables and secrets
+.env
+.env.local
+.env.development
+.env.development.local
+.env.production
+.env.production.local
+.env.*.local
+backend-example/.env
+backend-example/.env.local
+
+# Build outputs
+unpackage/
+dist/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Test files (may contain test data)
+test-birthday.js
+test-birthday-deepseek.js
+
+# Backend node_modules
+backend-example/node_modules/
