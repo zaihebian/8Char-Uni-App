@@ -45,3 +45,6 @@ test-birthday-deepseek.js
 
 # Backend node_modules
 backend-example/node_modules/
+
+# Vercel
+.vercel

@@ -82,11 +82,24 @@ async function getInterpretation() {
       // This is the recommended approach for production
       uni.showLoading({ title: '请求解读中...' });
       
-      // Call local backend API which has the DeepSeek key
-      const LOCAL_API = (import.meta.env.VITE_API_URL || "http://localhost:3000") + "/api";
+      // Determine API endpoint:
+      // 1. If VITE_API_URL is set, use it (for local dev with separate backend)
+      // 2. Otherwise, use relative path for Vercel serverless function
+      // 3. Fall back to localhost for local development
+      let apiUrl;
+      if (import.meta.env.VITE_API_URL) {
+        // Custom backend URL (for local dev or custom backend)
+        apiUrl = import.meta.env.VITE_API_URL + "/api/8char/deepseek-interpret";
+      } else if (import.meta.env.MODE === 'production') {
+        // Production: use Vercel serverless function (same origin)
+        apiUrl = '/api/8char/deepseek-interpret';
+      } else {
+        // Development: use localhost backend
+        apiUrl = "http://localhost:3000/api/8char/deepseek-interpret";
+      }
       
       uni.request({
-        url: LOCAL_API + '/8char/deepseek-interpret',
+        url: apiUrl,
         method: 'POST',
         data: {
           ...detailStore.defaultPayload,

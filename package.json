@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"description": "八字排盘",
 	"main": "main.js",
-	"author": "阿轩.",
+	"author": "",
 	"license": "GPL-3.0",
 	"scripts": {
 		"dev:app": "uni -p app --mode development",
