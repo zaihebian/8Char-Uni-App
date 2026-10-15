@@ -1,7 +1,7 @@
 {
-    "name" : "玄机阁",
+    "name" : "国学经典",
     "appid" : "__UNI__EB568D0",
-    "description" : "可根据已知时间、四柱进行排盘。 排盘界面分命主信息、基本命盘、专业细盘和在线批命四个界面。排盘数据包含四柱、十神、藏干、纳音、星运、空亡、天罡称骨、五行数据、大运流年、古籍参考等信息。",
+    "description" : "免费四柱排盘、基础解读与传统文化知识学习，排盘摘要可复制或下载。",
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,
@@ -110,7 +110,7 @@
             "mode" : "hash",
             "base" : "./"
         },
-        "title" : "玄机阁",
+        "title" : "国学经典",
         "devServer" : {
             "https" : false
         },
