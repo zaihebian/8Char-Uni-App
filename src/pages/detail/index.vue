@@ -19,7 +19,7 @@
     }">
       <basic v-if="tabsOption.current === 0"></basic>
       <major v-else-if="tabsOption.current === 1"></major>
-      <ai-interpretation v-else-if="tabsOption.current === 2"></ai-interpretation>
+      <report-export v-else-if="tabsOption.current === 2"></report-export>
     </scroll-view>
   </view>
 </template>
@@ -29,7 +29,7 @@ import {ref, reactive, onMounted, nextTick, computed} from 'vue';
 import HeaderView from './components/index/common/header/header.vue'
 import Basic from './components/index/basic/basic.vue'
 import Major from './components/index/major/major.vue'
-import AiInterpretation from './components/index/ai-interpretation/ai-interpretation.vue'
+import ReportExport from './components/index/report-export/report-export.vue'
 import {toHome} from "@/utils/router";
 import {useDetailStore} from "@/store/detail";
 
@@ -38,7 +38,7 @@ const tabsOption = reactive({
   list: [
     {key: 0, name: '基本命盘',},
     {key: 1, name: '专业细盘',},
-    {key: 2, name: 'AI解读',}
+    {key: 2, name: '保存报告',}
   ],
   current: 0
 });

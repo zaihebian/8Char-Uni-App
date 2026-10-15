@@ -12,7 +12,7 @@ const copyright = () => {
 
 const handleClick = () => {
   // #ifdef H5
-  window.open("//app.yxbug.cn/")
+  window.open("https://github.com/zaihebian/8Char-Uni-App", "_blank", "noopener")
   // #endif
 }
 </script>
