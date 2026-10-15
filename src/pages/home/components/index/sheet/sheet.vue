@@ -50,7 +50,7 @@
           dateLabel ||
           (form.model === 0 ? "请选择公历日期与时间" : "请选择年、月、日、时柱")
         }}</span
-        ><u-icon name="calendar" size="19" />
+        ><u-icon name="calendar" size="32" />
       </button>
       <view v-if="lunarLabel" class="lunar-note">农历：{{ lunarLabel }}</view>
     </view>
@@ -317,6 +317,12 @@ async function submitChart() {
   display: flex;
   align-items: center;
   min-height: 44px;
+}
+.gender-options :deep(.u-radio-group) {
+  flex-wrap: nowrap;
+}
+.gender-options :deep(.u-radio:last-child) {
+  margin-right: 0;
 }
 .chart-form :deep(.u-radio__label) {
   font-size: 14px !important;

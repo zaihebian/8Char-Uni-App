@@ -48,3 +48,7 @@ backend-example/node_modules/
 
 # Vercel
 .vercel
+
+# Browser verification artifacts
+.playwright-cli/
+output/playwright/
