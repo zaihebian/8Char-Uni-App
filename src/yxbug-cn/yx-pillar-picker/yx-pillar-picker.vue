@@ -12,7 +12,7 @@
     </view>
 
     <view v-if="isPillar">
-      <u-tabs v-model="tabCurrent" swiper :list="tabs.list" :show-bar="false" class="u-m-b-20" @change="tabsChange"></u-tabs>
+      <u-tabs v-model="tabCurrent" swiper :list="tabsList" :show-bar="false" class="u-m-b-20" @change="tabsChange"></u-tabs>
 
       <view class="u-flex u-row-top-center u-p-x-30" style="flex-flow: row wrap;">
         <view
@@ -35,7 +35,7 @@
 
     <view v-else>
       <view class="u-picker-body">
-        <picker-view :value="time.current" class="u-picker-view" indicator-style="height:100rpx;">
+        <picker-view :value="time.current" @change="time.current = $event.detail.value" class="u-picker-view" indicator-style="height:100rpx;">
           <picker-view-column>
             <view v-for="(item, index) in time.list" :key="index" class="u-column-item">
               <view class="u-line-1">{{ item.text }}</view>
@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-import {nextTick, onMounted, ref, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {LunarUtil, Solar} from "lunar-javascript";
 import {deleteFirstElement} from "@/utils/transform";
 
@@ -80,11 +80,6 @@ const pillar = ref(["壬", "壬", "壬", "壬", "寅", "寅", "寅", "寅"]);
 const tabsList = ref([]);
 const tabCurrent = ref(0);
 
-const tabs = ref({
-  list:[],
-  current:0,
-})
-
 const time = ref({
   list:[],
   current:[0]
@@ -96,12 +91,11 @@ watch(
       if (val !== "" && val.length === 8) {
         pillar.value = val.split("");
       }
-    }
+    },
+    { immediate: true }
 );
 
 onMounted(() => {
-  const model = tabCurrent.value > 3 ? TOPS : BOTTOMS;
-  pullTabsList(model)
   pullTabs(0);
 });
 
@@ -113,24 +107,29 @@ function pickerClick(i) {
 
 function confirm() {
   const index = time.value.current[0];
+  const selection = time.value.list[index];
+  if (!selection) return;
   isPillar.value = true;
-  emits("confirm", time.value.list[index]);
-  drawer.value.close();
+  emits("confirm", selection);
+  close();
 }
 
 function open(){
+  pickerCurrent.value = 0;
+  pullTabs(0);
   show.value = true;
 }
 
 function close() {
+  show.value = false;
   isPillar.value = true;
-  time.value.value = [];
+  time.value.list = [];
+  time.value.current = [0];
 }
 
 function pullTabs(e) {
   const model = e > 3 ? BOTTOMS : TOPS;
   pullTabsList(model)
-  nextTick();
   tabsChange(model.indexOf(pillar.value[e]));
 }
 
@@ -168,9 +167,13 @@ function getPillar() {
       const list = [];
       for(let item of result){
         const datetime = item.toYmdHms();
-        list.push({text: datetime, value: new Date(datetime).getTime()});
+        const date = new Date(0);
+        date.setFullYear(item.getYear(), item.getMonth() - 1, item.getDay());
+        date.setHours(item.getHour(), item.getMinute(), item.getSecond(), 0);
+        list.push({text: datetime, value: date.getTime()});
       }
       time.value.list = list;
+      time.value.current = [0];
       isPillar.value = false;
     } else {
       setTimeout(()=>{
