@@ -153,8 +153,8 @@ function validTimestamp(value) {
   const timestamp = Number(value);
   const date = new Date(timestamp);
   return Number.isFinite(timestamp) &&
-    date.getFullYear() >= 1900 &&
-    date.getFullYear() <= 2100
+    date.getFullYear() >= 1 &&
+    date.getFullYear() <= 9999
     ? timestamp
     : null;
 }
@@ -171,14 +171,16 @@ const dateLabel = computed(() =>
   form.timestamp === null
     ? ""
     : form.model === 0
-      ? timeFormat(form.timestamp)
+      ? timeFormat(new Date(form.timestamp))
       : lunar.value.getEightChar().toString(),
 );
-const defaultTime = computed(() =>
-  form.timestamp === null
-    ? "2001-01-01 00:00:00"
-    : timeFormat(new Date(form.timestamp), "yyyy-mm-dd hh:MM:ss"),
-);
+const defaultTime = computed(() => {
+  const date = new Date(form.timestamp);
+  // The calendar widget has a narrower range than four-pillar searches.
+  if (form.timestamp === null || date.getFullYear() < 1900 || date.getFullYear() > 2100)
+    return "2001-01-01 00:00:00";
+  return timeFormat(date, "yyyy-mm-dd hh:MM:ss");
+});
 const pillarDefaultValue = computed(() => {
   if (!lunar.value) return "";
   const bazi = lunar.value.getEightChar();
