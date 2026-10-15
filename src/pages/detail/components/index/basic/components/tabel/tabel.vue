@@ -1,8 +1,8 @@
 <template>
   <view>
-    <template v-for="(ditem, dindex) in detail">
+    <template v-for="(ditem, dindex) in detail" :key="ditem.key || 'heading'">
       <view class="u-flex u-col-top u-p-y-16" :class="{'bg-white':dindex%2===0}">
-        <view v-for="(kitem, kindex) in ['label', 'year', 'month', 'day', 'time']" :class="{ left: kindex === 0 }" class="item">
+        <view v-for="(kitem, kindex) in ['label', 'year', 'month', 'day', 'time']" :key="kitem" :class="{ left: kindex === 0 }" class="item">
           <text class="yx-text-weight-b" v-if="kindex === 0 || ditem.type === 'default'" @click="showTips(ditem.key,ditem.data[kitem])">{{ ditem.data[kitem] }}</text>
           <view
               v-else-if="ditem.type === 'pillar'"
@@ -18,7 +18,8 @@
           </view>
           <view
               v-else-if="ditem.type === 'list'"
-              v-for="citem in ditem.data[kitem]"
+              v-for="(citem, cindex) in ditem.data[kitem]"
+              :key="cindex"
               class="yx-text-weight-b u-m-b-8"
               :class="[
                 ditem.key === 'bottom_hide' ? `u-type-${getElAttr(citem)}` : '',
@@ -78,7 +79,7 @@ const detail = computed(()=>{
       data.data = detailStore[item.key];
     }
     data.key = item.key
-    data.data.label = item.label;
+    data.data = {...data.data, label: item.label};
     list.push(data)
   }
   return list

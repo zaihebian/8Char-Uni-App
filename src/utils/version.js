@@ -9,6 +9,7 @@ function compareVersion(currentVersion, onlineVersion) {
         if (current[i] < online[i]) {
             return i + 1;
         }
+        if (current[i] > online[i]) return 0;
     }
     return 0;
 }
@@ -59,11 +60,13 @@ export const checkVersion = () => {
                 for(let item of versions){
                     methods[compareVersion(item.current,item.online)](item.title,item.current,item.online)
                 }
+            }).catch(() => {
+                console.warn('版本信息暂时无法获取。');
             })
 
         }
 
-        setLocalStorage(cacheKey,APP_VERSION)
+        setLocalStorage('version',APP_VERSION)
     } catch (e) {
         // error
     }

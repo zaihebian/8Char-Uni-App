@@ -1,0 +1,181 @@
+/* Shared website layout. Header layer 10; pickers keep uView's overlay layers. */
+:root {
+  --site-bg: #f5f7f5;
+  --site-surface: #fff;
+  --site-ink: #233c34;
+  --site-muted: #5e6f67;
+  --site-line: #dce5de;
+  --site-accent: #285b48;
+  --site-tint: #edf3ee;
+  --site-radius: 16px;
+  --site-max: 1160px;
+  --site-font:
+    "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --site-serif: "Songti SC", "STSong", "SimSun", serif;
+}
+.website-page {
+  font-family: var(--site-font);
+  color: var(--site-ink);
+  background: var(--site-bg);
+  min-height: 100dvh;
+  font-size: 15px;
+  line-height: 1.7;
+}
+.website-page * {
+  box-sizing: border-box;
+}
+.website-page a {
+  color: var(--site-accent);
+  text-decoration: none;
+}
+.website-page a:hover {
+  text-decoration: underline;
+}
+.website-page a:focus-visible,
+.website-page button:focus-visible,
+.website-page input:focus-visible {
+  outline: 3px solid #72a78b;
+  outline-offset: 4px;
+}
+.site-shell {
+  width: calc(100% - 48px);
+  max-width: var(--site-max);
+  margin-left: auto;
+  margin-right: auto;
+}
+.web-header {
+  background: var(--site-surface);
+  border-bottom: 1px solid var(--site-line);
+  position: relative;
+  z-index: 10;
+}
+.web-nav {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+.web-brand {
+  font: 700 25px/1.2 var(--site-serif);
+  letter-spacing: 2px;
+  flex-shrink: 0;
+}
+.web-brand span {
+  display: block;
+  font: 11px/1.6 var(--site-font);
+  letter-spacing: 1px;
+  color: var(--site-muted);
+  margin-top: 5px;
+}
+.web-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+.web-links a {
+  font-size: 14px;
+  white-space: nowrap;
+  color: var(--site-muted);
+  padding: 24px 0;
+}
+.web-links a[aria-current="page"] {
+  color: var(--site-accent);
+  box-shadow: inset 0 -2px var(--site-accent);
+  font-weight: 600;
+}
+.web-menu-button {
+  display: none;
+}
+.web-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 30px 0;
+  margin-top: 52px;
+  border-top: 1px solid var(--site-line);
+  color: var(--site-muted);
+  font-size: 13px;
+}
+.web-footer strong {
+  color: var(--site-ink);
+  font-family: var(--site-serif);
+  font-size: 19px;
+}
+.web-footer p {
+  margin: 4px 0;
+}
+.web-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.web-footer-note {
+  width: 100%;
+  font-size: 12px;
+}
+.web-footer-note a {
+  margin-left: 12px;
+}
+@media (max-width: 767px) {
+  .site-shell {
+    width: calc(100% - 32px);
+  }
+  .web-nav {
+    min-height: 68px;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 12px 0;
+  }
+  .web-brand {
+    font-size: 23px;
+  }
+  .web-menu-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 8px 12px;
+    font: 13px/1.5 var(--site-font);
+    border: 1px solid var(--site-line);
+    border-radius: 8px;
+    background: var(--site-surface);
+    color: var(--site-ink);
+  }
+  .web-menu-button::after {
+    border: 0;
+  }
+  .web-links {
+    display: none;
+    width: 100%;
+    padding: 4px 0 8px;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+  .web-links.is-open {
+    display: flex;
+  }
+  .web-links a {
+    padding: 12px 0;
+    width: 50%;
+  }
+  .web-links a[aria-current="page"] {
+    box-shadow: none;
+  }
+  .web-footer {
+    margin-top: 32px;
+    padding-top: 24px;
+  }
+  .web-footer-links {
+    gap: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .website-page * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}

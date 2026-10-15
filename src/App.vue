@@ -15,4 +15,5 @@ onPageNotFound(() => {
 <style lang="scss">
 @import "vk-uview-ui/index.scss";
 @import "./style/index.scss";
+@import "./style/site.scss";
 </style>

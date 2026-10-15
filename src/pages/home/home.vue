@@ -1,36 +1,408 @@
 <template>
-  <yx-nav-header></yx-nav-header>
-  <head-box></head-box>
-  <sheet></sheet>
-  <!-- #ifdef H5 -->
-  <view class="site-info">
-    <view class="site-info__title">排盘免费，知识也免费</view>
-    <view class="site-info__text">输入出生时间即可免费查看命盘与基础解读，也可复制或下载报告。遇到不熟悉的术语，可从入门课程和概念库开始了解。本站不提供付费 AI 解读，也不会消耗站长的 AI token。</view>
-    <view class="site-info__links">
-      <a href="/learn/">国学知识首页</a>
-      <a href="/learn/module-0.html">从零开始</a>
-      <a href="/learn/basics/">查概念</a>
-    </view>
-    <view class="site-info__footer">
-      <a href="/learn/about.html">关于本站</a>
-      <a href="/learn/privacy.html">隐私政策</a>
-      <a href="https://github.com/axbug/8Char-H5" target="_blank" rel="noopener">上游项目</a>
-    </view>
+  <view class="website-page">
+    <site-header active="chart" />
+    <main class="site-shell home-main">
+      <section class="home-hero" aria-labelledby="home-title">
+        <view class="hero-intro"
+          ><view class="hero-copy">
+            <p class="hero-eyebrow">传统文化，从认识自己开始</p>
+            <h1 id="home-title">从一张命盘，<br />认识传统文化</h1>
+            <p class="hero-description">
+              免费排出四柱八字，读懂五行与十神。<br />从基本概念到完整课程，一步步学明白。
+            </p>
+            <a class="hero-link" href="/learn/module-0.html"
+              >初次接触？从入门课程开始 <span aria-hidden="true">↗</span></a
+            >
+          </view></view
+        >
+        <view class="chart-panel">
+          <view class="chart-panel-heading"
+            ><h2>免费四柱排盘</h2>
+            <span>无需注册</span></view
+          >
+          <p class="chart-panel-description">
+            填写出生信息，查看命盘、基础解读并保存报告。
+          </p>
+          <sheet />
+        </view>
+      </section>
+      <section class="learning-section" aria-labelledby="learning-title">
+        <view class="section-heading"
+          ><h2 id="learning-title">不止排盘，也把概念学明白</h2>
+          <a href="/learn/"
+            >浏览全部知识 <span aria-hidden="true">→</span></a
+          ></view
+        >
+        <view class="learning-grid"
+          ><a
+            v-for="category in categories"
+            :key="category.href"
+            :href="category.href"
+            class="learning-entry"
+          >
+            <span class="entry-symbol" aria-hidden="true">{{
+              category.symbol
+            }}</span>
+            <view
+              ><h3>{{ category.title }}</h3>
+              <p>{{ category.description }}</p>
+              <span class="entry-link">{{ category.label }} →</span></view
+            >
+          </a></view
+        >
+      </section>
+      <section class="course-section" aria-labelledby="course-title">
+        <view class="course-intro"
+          ><h2 id="course-title">从零开始，循序渐进</h2>
+          <p>
+            六个学习模块，建立自己的知识框架。<br />也可以带着排盘中遇到的问题，随时回来查阅。
+          </p>
+          <a href="/learn/module-0.html">开始第一课 →</a></view
+        >
+        <view class="course-list"
+          ><a v-for="course in courses" :key="course.href" :href="course.href"
+            ><span>{{ course.title }}</span
+            ><u-icon name="arrow-right" size="14" /></a
+        ></view>
+      </section>
+    </main>
+    <site-footer />
   </view>
-  <!-- #endif -->
 </template>
-
 <script setup>
-import HeadBox from './components/index/head/head.vue';
-import Sheet from './components/index/sheet/sheet.vue';
+import SiteHeader from "@/components/site/SiteHeader.vue";
+import SiteFooter from "@/components/site/SiteFooter.vue";
+import Sheet from "./components/index/sheet/sheet.vue";
+const categories = [
+  {
+    symbol: "五",
+    title: "五行与干支",
+    description: "认识四柱、五行、天干与地支。",
+    label: "基础概念",
+    href: "/learn/basics/",
+  },
+  {
+    symbol: "十",
+    title: "十神关系",
+    description: "理解日主与其他干支的关系。",
+    label: "十神详解",
+    href: "/learn/ten-gods/",
+  },
+  {
+    symbol: "星",
+    title: "神煞知识",
+    description: "了解传统命理中的辅助标记。",
+    label: "神煞索引",
+    href: "/learn/shensha/",
+  },
+  {
+    symbol: "局",
+    title: "格局入门",
+    description: "梳理常见格局与取用思路。",
+    label: "格局目录",
+    href: "/learn/geju/",
+  },
+];
+const courses = [
+  { title: "八字是什么", href: "/learn/module-0.html" },
+  { title: "五行、干支与纳音", href: "/learn/module-1.html" },
+  { title: "读懂十神", href: "/learn/module-2.html" },
+  { title: "认识神煞", href: "/learn/module-3.html" },
+  { title: "理解格局", href: "/learn/module-4.html" },
+  { title: "拿到命盘怎么看", href: "/learn/module-5.html" },
+];
 </script>
-
 <style scoped>
-.site-info{max-width:760px;margin:18px auto 36px;padding:22px 24px;background:#fff;border:1px solid #e7e2d8;border-radius:14px;color:#2b2b2b;line-height:1.7}
-.site-info__title{font-size:20px;font-weight:700;margin-bottom:8px}
-.site-info__text{color:#5d5a52}
-.site-info__links,.site-info__footer{display:flex;flex-wrap:wrap;gap:12px 20px;margin-top:18px}
-.site-info__footer{padding-top:14px;border-top:1px solid #e7e2d8;font-size:13px}
-.site-info a{color:#2c5d7c;text-decoration:none}
-.site-info a:hover{text-decoration:underline}
+.home-main {
+  padding-top: 28px;
+}
+.home-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  border: 1px solid var(--site-line);
+  border-radius: 20px;
+  overflow: hidden;
+  background: #eff3ec;
+}
+.hero-intro {
+  position: relative;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(249, 250, 245, 0.96) 0%,
+      rgba(249, 250, 245, 0.76) 46%,
+      rgba(249, 250, 245, 0) 80%
+    ),
+    url("/learn/assets/images/ink-landscape.jpg");
+  background-size: auto 100%;
+  background-position: 58% bottom;
+  min-height: 540px;
+  padding: 48px 38px;
+}
+.hero-eyebrow {
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--site-accent);
+  margin: 0 0 20px;
+}
+.hero-copy h1 {
+  font: 600 clamp(29px, 3vw, 40px) / 1.5 var(--site-serif);
+  letter-spacing: 1px;
+  color: #233c34;
+  margin: 0 0 20px;
+}
+.hero-description {
+  font-size: 15px;
+  line-height: 1.9;
+  color: #52635a;
+  margin: 0 0 26px;
+}
+.hero-link {
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+}
+.chart-panel {
+  background: var(--site-surface);
+  padding: 30px 36px;
+}
+.chart-panel-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  justify-content: space-between;
+}
+.chart-panel h2 {
+  font-size: 23px;
+  font-weight: 600;
+  margin: 0;
+}
+.chart-panel-heading > span {
+  font-size: 12px;
+  color: var(--site-accent);
+  background: var(--site-tint);
+  padding: 3px 10px;
+  border-radius: 6px;
+}
+.chart-panel-description {
+  color: var(--site-muted);
+  font-size: 13px;
+  margin: 6px 0 24px;
+}
+.learning-section {
+  margin-top: 40px;
+}
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.section-heading h2,
+.course-intro h2 {
+  font: 600 25px/1.5 var(--site-serif);
+  margin: 0;
+}
+.section-heading > a {
+  font-size: 13px;
+  white-space: nowrap;
+}
+.learning-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid var(--site-line);
+  border-radius: var(--site-radius);
+  background: var(--site-surface);
+  overflow: hidden;
+}
+.learning-entry {
+  padding: 26px 22px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  border-right: 1px solid var(--site-line);
+  transition: background 0.2s;
+}
+.learning-entry:last-child {
+  border-right: 0;
+}
+.learning-entry:hover {
+  background: var(--site-tint);
+  text-decoration: none !important;
+}
+.entry-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 42px;
+  border: 1px solid #c8d7cc;
+  border-radius: 6px;
+  font: 22px var(--site-serif);
+  color: var(--site-accent);
+  background: #f3f7f2;
+}
+.learning-entry h3 {
+  font-size: 16px;
+  margin: 0 0 7px;
+  color: var(--site-ink);
+  font-weight: 600;
+}
+.learning-entry p {
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--site-muted);
+  margin: 0 0 12px;
+}
+.entry-link {
+  font-size: 12px;
+}
+.course-section {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 48px;
+  margin-top: 40px;
+  border: 1px solid var(--site-line);
+  padding: 32px 36px;
+  border-radius: var(--site-radius);
+  background: var(--site-tint);
+}
+.course-intro p {
+  font-size: 14px;
+  color: var(--site-muted);
+  line-height: 1.9;
+  margin: 12px 0 18px;
+}
+.course-intro a {
+  font-size: 14px;
+  font-weight: 600;
+}
+.course-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
+}
+.course-list a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid #d3ded4;
+  font-size: 14px;
+}
+.course-list a:nth-last-child(-n + 2) {
+  border: 0;
+}
+@media (max-width: 1023px) {
+  .hero-intro {
+    padding: 36px 26px;
+  }
+  .chart-panel {
+    padding: 28px 24px;
+  }
+  .learning-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .learning-entry:nth-child(2) {
+    border-right: 0;
+  }
+  .learning-entry:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--site-line);
+  }
+  .course-section {
+    gap: 28px;
+    padding: 28px;
+  }
+}
+@media (max-width: 767px) {
+  .home-main {
+    padding-top: 18px;
+  }
+  .home-hero {
+    grid-template-columns: 1fr;
+    border-radius: 16px;
+  }
+  .hero-intro {
+    min-height: 0;
+    padding: 30px 24px 36px;
+    background-size: cover;
+    background-position: center;
+  }
+  .hero-copy h1 {
+    font-size: 30px;
+    margin-bottom: 12px;
+  }
+  .hero-eyebrow {
+    margin-bottom: 12px;
+    font-size: 11px;
+    letter-spacing: 2px;
+  }
+  .hero-description {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  .hero-link {
+    font-size: 13px;
+  }
+  .chart-panel {
+    padding: 24px 20px;
+  }
+  .chart-panel h2 {
+    font-size: 21px;
+  }
+  .chart-panel-description {
+    margin-bottom: 20px;
+  }
+  .learning-section {
+    margin-top: 30px;
+  }
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .section-heading h2,
+  .course-intro h2 {
+    font-size: 23px;
+  }
+  .learning-grid {
+    grid-template-columns: 1fr;
+  }
+  .learning-entry {
+    padding: 22px;
+    border-right: 0;
+    border-bottom: 1px solid var(--site-line);
+  }
+  .learning-entry:last-child {
+    border-bottom: 0;
+  }
+  .learning-entry p {
+    font-size: 13px;
+    margin-bottom: 7px;
+  }
+  .learning-entry h3 {
+    font-size: 17px;
+  }
+  .entry-symbol {
+    width: 44px;
+    height: 48px;
+  }
+  .course-section {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 28px;
+    padding: 24px;
+  }
+  .course-list {
+    grid-template-columns: 1fr;
+  }
+  .course-list a:nth-last-child(2) {
+    border-bottom: 1px solid #d3ded4;
+  }
+}
 </style>

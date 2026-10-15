@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia';
 import {timeFormat} from "@/utils/transform";
 
-const DEFAULT_TEMPLATE_FILL = {year: "",month: "",day: "",time: "",}
+const createPillars = () => ({year: '', month: '', day: '', time: ''});
 
 export const useDetailStore = defineStore('detail', {
     state: () => {
@@ -24,29 +24,29 @@ export const useDetailStore = defineStore('detail', {
             },
             constellation: "",
             zodiac: "",
-            top: DEFAULT_TEMPLATE_FILL,
-            bottom: DEFAULT_TEMPLATE_FILL,
+            top: createPillars(),
+            bottom: createPillars(),
             bottom_hide: {
                 year: [],month: [],day: [],time: []
             },
-            empty: DEFAULT_TEMPLATE_FILL,
+            empty: createPillars(),
             start: {
-                main: DEFAULT_TEMPLATE_FILL,
-                assiste: DEFAULT_TEMPLATE_FILL,
+                main: createPillars(),
+                assiste: createPillars(),
             },
-            trend: DEFAULT_TEMPLATE_FILL,
-            nayin: DEFAULT_TEMPLATE_FILL,
+            trend: createPillars(),
+            nayin: createPillars(),
             element: {
                 relation: [],
                 pro_decl: new Array(5).fill(''),
                 include: [],
                 ninclude: []
             },
-            selfsit: DEFAULT_TEMPLATE_FILL,
-            embryo: [new Array(3).fill([])],
+            selfsit: createPillars(),
+            embryo: [Array.from({length: 3}, () => [])],
             tb_relation: {top:[],bottom:[]},
             gods: [],
-            start_tend:DEFAULT_TEMPLATE_FILL
+            start_tend:createPillars()
         };
     },
     actions: {
