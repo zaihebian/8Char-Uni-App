@@ -3,7 +3,10 @@
     <template v-for="(ditem, dindex) in detail" :key="ditem.key || 'heading'">
       <view class="u-flex u-col-top u-p-y-16" :class="{'bg-white':dindex%2===0}">
         <view v-for="(kitem, kindex) in ['label', 'year', 'month', 'day', 'time']" :key="kitem" :class="{ left: kindex === 0 }" class="item">
-          <text class="yx-text-weight-b" v-if="kindex === 0 || ditem.type === 'default'" @click="showTips(ditem.key,ditem.data[kitem])">{{ ditem.data[kitem] }}</text>
+          <view class="term-cell" v-if="kindex === 0 || ditem.type === 'default'" @click="showTips(ditem.key,ditem.data[kitem])">
+            <view v-if="relationIndex(ditem.data[kitem]) !== -1" class="deity-icon" :style="relationSpriteStyle(ditem.data[kitem])"></view>
+            <text class="yx-text-weight-b">{{ ditem.data[kitem] }}</text>
+          </view>
           <view
               v-else-if="ditem.type === 'pillar'"
               class="u-flex u-row-center u-col-center"
@@ -12,9 +15,7 @@
                 :class="GetPillarColor(ditem.data[kitem], dindex)"
                 class="yx-text-weight-b u-font-44"
             >{{ ditem.data[kitem] }}</view>
-            <view class="u-m-l-4">
-              <u-icon :name="GetIconUrl(ditem.data[kitem])" :size="40"></u-icon>
-            </view>
+            <view class="element-icon u-m-l-4" :style="elementSpriteStyle(ditem.data[kitem])"></view>
           </view>
           <view
               v-else-if="ditem.type === 'list'"
@@ -26,7 +27,7 @@
                 ditem.key === 'gods' ? `u-type-primary` : ''
               ]"
               @click="showTips(ditem.key,citem)"
-          >{{ citem + (ditem.key==='bottom_hide'?getElAttr(citem,'label'):'') }}</view>
+          ><view v-if="relationIndex(citem) !== -1" class="deity-icon deity-icon-small" :style="relationSpriteStyle(citem)"></view>{{ citem + (ditem.key==='bottom_hide'?getElAttr(citem,'label'):'') }}</view>
         </view>
       </view>
     </template>
@@ -89,8 +90,26 @@ function GetPillarColor(str) {
   return [`u-type-${getElAttr(str)}`,];
 }
 
-function GetIconUrl(str) {
-  return getUrl(`static/icon/element/${getElAttr(str,'index')}.svg`);
+function elementSpriteStyle(str) {
+  const index = getElAttr(str,'index');
+  return {
+    backgroundImage: `url(${getUrl('static/icon/element-new/sprite.png')})`,
+    backgroundPosition: `${index * 25}% 50%`,
+  }
+}
+
+const relations = ['比肩','劫财','食神','伤官','正财','偏财','正官','七杀','正印','偏印'];
+function relationIndex(label) {
+  return relations.indexOf(label);
+}
+function relationSpriteStyle(label) {
+  const index = relationIndex(label);
+  const column = index % 5;
+  const row = Math.floor(index / 5);
+  return {
+    backgroundImage: `url(${getUrl('static/icon/ten-gods/sprite.png')})`,
+    backgroundPosition: `${column * 25}% ${row * 100}%`,
+  }
 }
 
 function showTips(type,label){
@@ -112,6 +131,7 @@ function showTips(type,label){
 .item {
   width: 22%;
   text-align: center;
+  min-width: 0;
 }
 
 .left {
@@ -123,5 +143,14 @@ function showTips(type,label){
   //background: #ffffff;
   //border: 0px solid rgb(230, 230, 230);
   //box-shadow: rgba(51, 51, 51, 0.07) 0px 0.15625rem 0.375rem;
+}
+.term-cell { display:flex; align-items:center; justify-content:center; gap:8rpx; min-height:46rpx; }
+.deity-icon { width:48rpx; height:48rpx; flex:0 0 48rpx; border-radius:50%; background-repeat:no-repeat; background-size:500% 200%; background-color:#f3f6ef; }
+.deity-icon-small { display:inline-block; width:34rpx; height:34rpx; vertical-align:middle; margin-right:4rpx; }
+.element-icon { width:46rpx; height:46rpx; flex:0 0 46rpx; border-radius:50%; background-repeat:no-repeat; background-size:500% 100%; background-color:#f5f2e9; }
+@media (max-width: 767px) {
+  .deity-icon { width:38rpx; height:38rpx; flex-basis:38rpx; }
+  .element-icon { width:38rpx; height:38rpx; flex-basis:38rpx; }
+  .term-cell { flex-direction:column; gap:2rpx; }
 }
 </style>

@@ -1,6 +1,6 @@
 /* Shared website layout. Header layer 10; pickers keep uView's overlay layers. */
 :root {
-  --site-bg: #f5f7f5;
+  --site-bg: #f4f6f2;
   --site-surface: #fff;
   --site-ink: #233c34;
   --site-muted: #5e6f67;
@@ -17,7 +17,10 @@
 .website-page {
   font-family: var(--site-font);
   color: var(--site-ink);
-  background: var(--site-bg);
+  background:
+    radial-gradient(circle at 8% 6%, rgba(113, 145, 126, .10), transparent 25rem),
+    radial-gradient(circle at 94% 30%, rgba(183, 137, 59, .08), transparent 28rem),
+    var(--site-bg);
   min-height: 100dvh;
   font-size: 15px;
   line-height: 1.7;
@@ -45,7 +48,8 @@
   margin-right: auto;
 }
 .web-header {
-  background: var(--site-surface);
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(16px) saturate(140%);
   border-bottom: 1px solid var(--site-line);
   position: relative;
   z-index: 10;

@@ -123,6 +123,7 @@ const courses = [
   border-radius: 20px;
   overflow: hidden;
   background: #eff3ec;
+  box-shadow: 0 24px 60px rgba(31, 62, 49, .10);
 }
 .hero-intro {
   position: relative;
@@ -225,6 +226,7 @@ const courses = [
   align-items: flex-start;
   border-right: 1px solid var(--site-line);
   transition: background 0.2s;
+  position: relative;
 }
 .learning-entry:last-child {
   border-right: 0;
@@ -244,7 +246,8 @@ const courses = [
   border-radius: 6px;
   font: 22px var(--site-serif);
   color: var(--site-accent);
-  background: #f3f7f2;
+  background: linear-gradient(145deg,#f8fbf5,#e5eee6);
+  box-shadow: inset 0 0 0 3px rgba(255,255,255,.65), 0 7px 16px rgba(40,91,72,.09);
 }
 .learning-entry h3 {
   font-size: 16px;

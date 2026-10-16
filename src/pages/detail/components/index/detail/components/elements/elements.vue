@@ -18,6 +18,7 @@
     </view>
     <template v-for="(item, index) in els">
       <view class="u-flex u-row-center u-m-y-20">
+        <view class="element-mark" :style="elementStyle(index)" aria-hidden="true"></view>
         <text class="yx-text-weight-b u-p-r-16">{{ ELEMENT.labels[index] }}</text>
         <view style="width: 100%;">
           <u-line-progress
@@ -45,6 +46,7 @@ import {ref, computed} from 'vue';
 import ProDecl from '../../../common/pro-decl/pro-decl.vue';
 import {useDetailStore} from "@/store/detail";
 import {ELEMENT} from "@/config/map";
+import {getUrl} from "@/utils/file";
 
 const detailStore = useDetailStore();
 const colors = ELEMENT.colors;
@@ -54,4 +56,25 @@ const els = computed(()=>{
   const key = isInclude.value?"include":"ninclude"
   return detailStore.element[key].list
 })
+
+function elementStyle(index) {
+  return {
+    backgroundImage: `url(${getUrl('static/icon/element-new/sprite.png')})`,
+    backgroundPosition: `${index * 25}% 50%`,
+  }
+}
 </script>
+
+<style scoped>
+.element-mark {
+  width: 64rpx;
+  height: 64rpx;
+  flex: 0 0 64rpx;
+  margin-right: 12rpx;
+  border-radius: 50%;
+  background-size: 500% 100%;
+  background-repeat: no-repeat;
+  background-color: #f4f4ec;
+  box-shadow: 0 5rpx 14rpx rgba(35,60,52,.10);
+}
+</style>

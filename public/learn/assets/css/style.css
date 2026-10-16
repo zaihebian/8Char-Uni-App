@@ -3,7 +3,7 @@
    ========================================================= */
 
 :root {
-  --paper: #f5f7f5;
+  --paper: #f4f6f2;
   --card: #ffffff;
   --ink: #233c34;
   --ink-soft: #5e6f67;
@@ -34,7 +34,10 @@ body {
   margin: 0;
   font-family: var(--sans);
   color: var(--ink);
-  background: var(--paper);
+  background:
+    radial-gradient(circle at 7% 10%, rgba(75,126,101,.09), transparent 30rem),
+    radial-gradient(circle at 94% 32%, rgba(184,137,59,.08), transparent 28rem),
+    var(--paper);
   line-height: 1.8;
   font-size: 16.5px;
   -webkit-font-smoothing: antialiased;
@@ -265,6 +268,17 @@ section {
   padding: 24px;
   box-shadow: var(--shadow);
   margin: 18px 0;
+  position: relative;
+  overflow: hidden;
+}
+.panel-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(var(--brand), #b8893b);
 }
 .panel-card h3 {
   font-family: var(--serif);
@@ -635,6 +649,29 @@ figure.svgfig figcaption {
   color: var(--ink-soft);
   font-size: 13.5px;
   margin: 0;
+}
+.gods-grid .hubcard {
+  min-height: 210px;
+  padding-right: 112px;
+}
+.god-icon {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background-image: url("../images/ten-gods-sprite.png");
+  background-size: 500% 200%;
+  background-repeat: no-repeat;
+  background-color: #f1f5ed;
+  box-shadow: 0 8px 20px rgba(35,60,52,.11);
+}
+.god-0{background-position:0 0}.god-1{background-position:25% 0}.god-2{background-position:50% 0}.god-3{background-position:75% 0}.god-4{background-position:100% 0}
+.god-5{background-position:0 100%}.god-6{background-position:25% 100%}.god-7{background-position:50% 100%}.god-8{background-position:75% 100%}.god-9{background-position:100% 100%}
+@media (max-width: 640px) {
+  .gods-grid .hubcard { min-height: 170px; padding-right: 92px; }
+  .god-icon { width: 76px; height: 76px; }
 }
 
 /* ---------- 六十甲子 / 纳音 表格 ---------- */
@@ -1102,5 +1139,19 @@ button:focus-visible {
   *::after {
     animation: none !important;
     transition: none !important;
+  }
+}
+
+/* 十神角色卡：置于文件末尾，避免旧版兼容样式覆盖。 */
+.gods-grid .hubcard {
+  position: relative;
+  min-height: 210px;
+  padding: 24px 112px 24px 24px;
+  overflow: hidden;
+}
+@media (max-width: 640px) {
+  .gods-grid .hubcard {
+    min-height: 170px;
+    padding: 22px 92px 22px 20px;
   }
 }

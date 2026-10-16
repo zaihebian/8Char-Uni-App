@@ -63,6 +63,18 @@ onMounted(() => {
 <style scoped>
 .result-main {
   padding-top: 28px;
+  position: relative;
+}
+.result-main::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 280px;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 82% 16%, rgba(184,137,59,.13), transparent 34%), radial-gradient(circle at 12% 0, rgba(40,91,72,.12), transparent 36%);
+}
+.result-main > * { position: relative; z-index: 1; }
 }
 .result-heading {
   display: flex;
@@ -89,7 +101,8 @@ onMounted(() => {
   border-radius: 16px;
   overflow: hidden;
   padding: 12px;
-  background: var(--site-surface);
+  background: linear-gradient(135deg, #fff 0%, #f5f8f1 100%);
+  box-shadow: 0 14px 34px rgba(31, 62, 49, .08);
 }
 .result-tabs {
   display: flex;
@@ -123,6 +136,7 @@ onMounted(() => {
   border-radius: 0 0 16px 16px;
   min-width: 0;
   overflow-x: auto;
+  box-shadow: 0 16px 38px rgba(31, 62, 49, .07);
 }
 .result-help {
   display: flex;
