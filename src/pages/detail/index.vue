@@ -75,7 +75,6 @@ onMounted(() => {
   background: radial-gradient(circle at 82% 16%, rgba(184,137,59,.13), transparent 34%), radial-gradient(circle at 12% 0, rgba(40,91,72,.12), transparent 36%);
 }
 .result-main > * { position: relative; z-index: 1; }
-}
 .result-heading {
   display: flex;
   align-items: center;
