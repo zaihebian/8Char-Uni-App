@@ -1,4 +1,26 @@
-import shenshaSprite from "@/static/icon/shensha/sprite.png";
+import icon0 from "@/static/icon/shensha/individual/0.png";
+import icon1 from "@/static/icon/shensha/individual/1.png";
+import icon2 from "@/static/icon/shensha/individual/2.png";
+import icon3 from "@/static/icon/shensha/individual/3.png";
+import icon4 from "@/static/icon/shensha/individual/4.png";
+import icon5 from "@/static/icon/shensha/individual/5.png";
+import icon6 from "@/static/icon/shensha/individual/6.png";
+import icon7 from "@/static/icon/shensha/individual/7.png";
+import icon8 from "@/static/icon/shensha/individual/8.png";
+import icon9 from "@/static/icon/shensha/individual/9.png";
+import icon10 from "@/static/icon/shensha/individual/10.png";
+import icon11 from "@/static/icon/shensha/individual/11.png";
+import icon12 from "@/static/icon/shensha/individual/12.png";
+import icon13 from "@/static/icon/shensha/individual/13.png";
+import icon14 from "@/static/icon/shensha/individual/14.png";
+import icon15 from "@/static/icon/shensha/individual/15.png";
+
+const SHENSHA_IMAGES = [
+  icon0, icon1, icon2, icon3,
+  icon4, icon5, icon6, icon7,
+  icon8, icon9, icon10, icon11,
+  icon12, icon13, icon14, icon15,
+];
 
 const SHENSHA_GROUPS = [
   ["学堂", "词馆", "十灵日", "六秀日"],
@@ -29,14 +51,7 @@ function fallbackIndex(label = "") {
   return Array.from(label).reduce((sum, char) => sum + char.charCodeAt(0), 0) % 16;
 }
 
-export function shenshaSpriteStyle(label) {
+export function shenshaImage(label) {
   const index = SHENSHA_INDEX.get(label) ?? fallbackIndex(label);
-  const column = index % 4;
-  const row = Math.floor(index / 4);
-  return {
-    backgroundImage: `url(${shenshaSprite})`,
-    backgroundPosition: `${column * (100 / 3)}% ${row * (100 / 3)}%`,
-    backgroundSize: "400% 400%",
-    backgroundRepeat: "no-repeat",
-  };
+  return SHENSHA_IMAGES[index];
 }

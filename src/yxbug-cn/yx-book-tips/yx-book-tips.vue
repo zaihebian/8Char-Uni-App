@@ -13,9 +13,9 @@
   >
     <scroll-view scroll-y="true" style="height: 760rpx;">
       <view class="u-p-20">
-        <view v-if="portrait || shenshaArtwork" class="tips-portrait">
+        <view v-if="portrait || shenshaPortrait" class="tips-portrait">
           <image v-if="portrait" :src="portrait" :alt="`${config.label}神灵简笔画全身形象`" mode="aspectFit"></image>
-          <view v-else class="shensha-portrait" :style="shenshaArtwork" role="img" :aria-label="`${config.label}神煞象征图标`"></view>
+          <image v-else class="shensha-portrait" :src="shenshaPortrait" :alt="`${config.label}神煞象征图标`" mode="aspectFit"></image>
           <a v-if="detailUrl" :href="detailUrl" class="portrait-link">查看完整图文解读 →</a>
         </view>
         <template v-for="item in detail">
@@ -30,17 +30,8 @@
 <script setup>
 import {ref,computed} from "vue";
 import {useTipsStore} from "@/store/tips";
-import {shenshaSpriteStyle} from "@/utils/shensha-art";
-import bijianPortrait from "@/static/icon/ten-gods/full/bijian.png";
-import jiecaiPortrait from "@/static/icon/ten-gods/full/jiecai.png";
-import shishenPortrait from "@/static/icon/ten-gods/full/shishen.png";
-import shangguanPortrait from "@/static/icon/ten-gods/full/shangguan.png";
-import zhengcaiPortrait from "@/static/icon/ten-gods/full/zhengcai.png";
-import piancaiPortrait from "@/static/icon/ten-gods/full/piancai.png";
-import zhengguanPortrait from "@/static/icon/ten-gods/full/zhengguan.png";
-import qishaPortrait from "@/static/icon/ten-gods/full/qisha.png";
-import zhengyinPortrait from "@/static/icon/ten-gods/full/zhengyin.png";
-import pianyinPortrait from "@/static/icon/ten-gods/full/pianyin.png";
+import {shenshaImage} from "@/utils/shensha-art";
+import {tenGodImage, tenGodSlug} from "@/utils/ten-god-art";
 
 const config = ref({
   show:false,
@@ -59,28 +50,9 @@ async function setDetail(type,label){
   if(detail?.label) config.value.show = true;
 }
 
-const relationSlugs = {
-  比肩:"bijian", 劫财:"jiecai", 食神:"shishen", 伤官:"shangguan",
-  正财:"zhengcai", 偏财:"piancai", 正官:"zhengguan", 七杀:"qisha",
-  正印:"zhengyin", 偏印:"pianyin",
-};
-
-const relationPortraits = {
-  bijian: bijianPortrait,
-  jiecai: jiecaiPortrait,
-  shishen: shishenPortrait,
-  shangguan: shangguanPortrait,
-  zhengcai: zhengcaiPortrait,
-  piancai: piancaiPortrait,
-  zhengguan: zhengguanPortrait,
-  qisha: qishaPortrait,
-  zhengyin: zhengyinPortrait,
-  pianyin: pianyinPortrait,
-};
-
-const relationSlug = computed(() => config.value.type === "relation" ? relationSlugs[config.value.label] : "");
-const portrait = computed(() => relationPortraits[relationSlug.value] || "");
-const shenshaArtwork = computed(() => config.value.type === "gods" ? shenshaSpriteStyle(config.value.label) : null);
+const relationSlug = computed(() => config.value.type === "relation" ? tenGodSlug(config.value.label) : "");
+const portrait = computed(() => config.value.type === "relation" ? tenGodImage(config.value.label) : "");
+const shenshaPortrait = computed(() => config.value.type === "gods" ? shenshaImage(config.value.label) : "");
 const detailUrl = computed(() => relationSlug.value ? `/learn/ten-gods/${relationSlug.value}.html` : "");
 
 const detail = computed(()=>{

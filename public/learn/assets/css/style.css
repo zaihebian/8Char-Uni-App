@@ -685,14 +685,10 @@ figure.svgfig figcaption {
   width: 96px;
   height: 96px;
   border-radius: 50%;
-  background-image: url("../images/ten-gods-sprite.png");
-  background-size: 500% 200%;
-  background-repeat: no-repeat;
+  object-fit: contain;
   background-color: #f1f5ed;
   box-shadow: 0 8px 20px rgba(35,60,52,.11);
 }
-.god-0{background-position:0 0}.god-1{background-position:25% 0}.god-2{background-position:50% 0}.god-3{background-position:75% 0}.god-4{background-position:100% 0}
-.god-5{background-position:0 100%}.god-6{background-position:25% 100%}.god-7{background-position:50% 100%}.god-8{background-position:75% 100%}.god-9{background-position:100% 100%}
 @media (max-width: 640px) {
   .gods-grid .hubcard { min-height: 170px; padding-right: 92px; }
   .god-icon { width: 76px; height: 76px; }

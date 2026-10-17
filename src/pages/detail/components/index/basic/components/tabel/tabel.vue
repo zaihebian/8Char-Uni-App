@@ -4,7 +4,7 @@
       <view class="u-flex u-col-top u-p-y-16" :class="{'bg-white':dindex%2===0}">
         <view v-for="(kitem, kindex) in ['label', 'year', 'month', 'day', 'time']" :key="kitem" :class="{ left: kindex === 0 }" class="item">
           <view class="term-cell" v-if="kindex === 0 || ditem.type === 'default'" @click="showTips(ditem.key,ditem.data[kitem])">
-            <view v-if="relationIndex(ditem.data[kitem]) !== -1" class="deity-icon" :style="relationSpriteStyle(ditem.data[kitem])"></view>
+            <image v-if="relationImage(ditem.data[kitem])" class="deity-icon" :src="relationImage(ditem.data[kitem])" mode="aspectFit"></image>
             <text class="yx-text-weight-b">{{ ditem.data[kitem] }}</text>
           </view>
           <view
@@ -28,8 +28,8 @@
               ]"
               @click="showTips(ditem.key,citem)"
           >
-            <view v-if="relationIndex(citem) !== -1" class="deity-icon deity-icon-small" :style="relationSpriteStyle(citem)"></view>
-            <view v-if="ditem.key === 'gods'" class="shensha-icon" :style="shenshaSpriteStyle(citem)"></view>
+            <image v-if="relationImage(citem)" class="deity-icon deity-icon-small" :src="relationImage(citem)" mode="aspectFit"></image>
+            <image v-if="ditem.key === 'gods'" class="shensha-icon" :src="shenshaImage(citem)" mode="aspectFit"></image>
             {{ citem + (ditem.key==='bottom_hide'?getElAttr(citem,'label'):'') }}
           </view>
         </view>
@@ -43,9 +43,9 @@
 import {computed, ref} from 'vue';
 import {useDetailStore} from "@/store/detail";
 import {getElAttr} from "@/utils/transform";
-import {shenshaSpriteStyle} from "@/utils/shensha-art";
+import {shenshaImage} from "@/utils/shensha-art";
+import {tenGodImage} from "@/utils/ten-god-art";
 import elementSprite from "@/static/icon/element-new/sprite.png";
-import tenGodSprite from "@/static/icon/ten-gods/sprite.png";
 
 const detailStore = useDetailStore();
 const tips = ref();
@@ -104,18 +104,8 @@ function elementSpriteStyle(str) {
   }
 }
 
-const relations = ['比肩','劫财','食神','伤官','正财','偏财','正官','七杀','正印','偏印'];
-function relationIndex(label) {
-  return relations.indexOf(label);
-}
-function relationSpriteStyle(label) {
-  const index = relationIndex(label);
-  const column = index % 5;
-  const row = Math.floor(index / 5);
-  return {
-    backgroundImage: `url(${tenGodSprite})`,
-    backgroundPosition: `${column * 25}% ${row * 100}%`,
-  }
+function relationImage(label) {
+  return tenGodImage(label);
 }
 
 function showTips(type,label){
@@ -151,9 +141,9 @@ function showTips(type,label){
   //box-shadow: rgba(51, 51, 51, 0.07) 0px 0.15625rem 0.375rem;
 }
 .term-cell { display:flex; align-items:center; justify-content:center; gap:8rpx; min-height:46rpx; }
-.deity-icon { width:48rpx; height:48rpx; flex:0 0 48rpx; border-radius:50%; background-repeat:no-repeat; background-size:500% 200%; background-color:#f3f6ef; }
+.deity-icon { width:48rpx; height:48rpx; flex:0 0 48rpx; border-radius:50%; object-fit:contain; background-color:#f3f6ef; }
 .deity-icon-small { display:inline-block; width:34rpx; height:34rpx; vertical-align:middle; margin-right:4rpx; }
-.shensha-icon { display:inline-block; width:38rpx; height:38rpx; vertical-align:middle; margin-right:5rpx; border-radius:50%; background-color:#f3f6ef; }
+.shensha-icon { display:inline-block; width:38rpx; height:38rpx; vertical-align:middle; margin-right:5rpx; border-radius:50%; object-fit:contain; background-color:#f3f6ef; }
 .element-icon { width:46rpx; height:46rpx; flex:0 0 46rpx; border-radius:50%; background-repeat:no-repeat; background-size:500% 100%; background-color:#f5f2e9; }
 @media (max-width: 767px) {
   .deity-icon { width:38rpx; height:38rpx; flex-basis:38rpx; }
