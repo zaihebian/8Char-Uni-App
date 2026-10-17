@@ -13,9 +13,10 @@
   >
     <scroll-view scroll-y="true" style="height: 760rpx;">
       <view class="u-p-20">
-        <view v-if="portrait" class="tips-portrait">
-          <image :src="portrait" :alt="`${config.label}神灵简笔画全身形象`" mode="aspectFit"></image>
-          <a :href="detailUrl" class="portrait-link">查看完整图文解读 →</a>
+        <view v-if="portrait || shenshaArtwork" class="tips-portrait">
+          <image v-if="portrait" :src="portrait" :alt="`${config.label}神灵简笔画全身形象`" mode="aspectFit"></image>
+          <view v-else class="shensha-portrait" :style="shenshaArtwork" role="img" :aria-label="`${config.label}神煞象征图标`"></view>
+          <a v-if="detailUrl" :href="detailUrl" class="portrait-link">查看完整图文解读 →</a>
         </view>
         <template v-for="item in detail">
           <view class="title u-m-y-10">{{item.title}}</view>
@@ -29,7 +30,17 @@
 <script setup>
 import {ref,computed} from "vue";
 import {useTipsStore} from "@/store/tips";
-import {getUrl} from "@/utils/file";
+import {shenshaSpriteStyle} from "@/utils/shensha-art";
+import bijianPortrait from "@/static/icon/ten-gods/full/bijian.png";
+import jiecaiPortrait from "@/static/icon/ten-gods/full/jiecai.png";
+import shishenPortrait from "@/static/icon/ten-gods/full/shishen.png";
+import shangguanPortrait from "@/static/icon/ten-gods/full/shangguan.png";
+import zhengcaiPortrait from "@/static/icon/ten-gods/full/zhengcai.png";
+import piancaiPortrait from "@/static/icon/ten-gods/full/piancai.png";
+import zhengguanPortrait from "@/static/icon/ten-gods/full/zhengguan.png";
+import qishaPortrait from "@/static/icon/ten-gods/full/qisha.png";
+import zhengyinPortrait from "@/static/icon/ten-gods/full/zhengyin.png";
+import pianyinPortrait from "@/static/icon/ten-gods/full/pianyin.png";
 
 const config = ref({
   show:false,
@@ -54,8 +65,22 @@ const relationSlugs = {
   正印:"zhengyin", 偏印:"pianyin",
 };
 
+const relationPortraits = {
+  bijian: bijianPortrait,
+  jiecai: jiecaiPortrait,
+  shishen: shishenPortrait,
+  shangguan: shangguanPortrait,
+  zhengcai: zhengcaiPortrait,
+  piancai: piancaiPortrait,
+  zhengguan: zhengguanPortrait,
+  qisha: qishaPortrait,
+  zhengyin: zhengyinPortrait,
+  pianyin: pianyinPortrait,
+};
+
 const relationSlug = computed(() => config.value.type === "relation" ? relationSlugs[config.value.label] : "");
-const portrait = computed(() => relationSlug.value ? getUrl(`static/icon/ten-gods/full/${relationSlug.value}.png`) : "");
+const portrait = computed(() => relationPortraits[relationSlug.value] || "");
+const shenshaArtwork = computed(() => config.value.type === "gods" ? shenshaSpriteStyle(config.value.label) : null);
 const detailUrl = computed(() => relationSlug.value ? `/learn/ten-gods/${relationSlug.value}.html` : "");
 
 const detail = computed(()=>{
@@ -111,6 +136,11 @@ defineExpose({
   display: block;
   width: 320rpx;
   height: 320rpx;
+  margin: 0 auto 10rpx;
+}
+.shensha-portrait {
+  width: 360rpx;
+  height: 360rpx;
   margin: 0 auto 10rpx;
 }
 .portrait-link {

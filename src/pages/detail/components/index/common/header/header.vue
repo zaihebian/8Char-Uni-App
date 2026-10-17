@@ -33,7 +33,8 @@ import {deleteFirstElement} from '@/utils/transform';
 import {useDetailStore} from "@/store/detail";
 import {computed, ref} from "vue";
 import {LunarUtil} from "lunar-javascript";
-import {getUrl} from "@/utils/file";
+import zodiacSprite from "@/static/icon/zodiac-new/sprite.png";
+import siteLogo from "@/static/icon/site/logo.svg";
 
 const isHide = ref(false);
 const detailStore = useDetailStore();
@@ -56,11 +57,11 @@ function GetChineseZodiac(sx){
     const column = index % 6;
     const row = Math.floor(index / 6);
     return {
-      backgroundImage: `url(${getUrl('static/icon/zodiac-new/sprite.png')})`,
+      backgroundImage: `url(${zodiacSprite})`,
       backgroundPosition: `${column * 20}% ${row * 100}%`,
     }
   }
-  return {backgroundImage: `url(${getUrl('static/icon/site/logo.svg')})`};
+  return {backgroundImage: `url(${siteLogo})`};
 }
 </script>
 

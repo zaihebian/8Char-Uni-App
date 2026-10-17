@@ -27,28 +27,10 @@
       >
     </view>
     <view class="field">
-      <view class="field-label">排盘方式</view>
-      <view class="input-modes" role="group" aria-label="排盘方式"
-        ><button
-          v-for="(label, index) in inputModes"
-          :key="label"
-          :class="{ 'is-selected': form.model === index }"
-          :aria-pressed="form.model === index"
-          :disabled="isSubmitting"
-          @click="form.model = index"
-        >
-          {{ label }}
-        </button></view
-      >
-    </view>
-    <view class="field">
-      <view class="field-label">{{
-        form.model === 0 ? "出生日期与时间" : "选择四柱"
-      }}</view>
+      <view class="field-label">出生日期与时间</view>
       <button class="date-input" :disabled="isSubmitting" @click="selectTime">
         <span :class="{ placeholder: !dateLabel }">{{
-          dateLabel ||
-          (form.model === 0 ? "请选择公历日期与时间" : "请选择年、月、日、时柱")
+          dateLabel || "请选择公历日期与时间"
         }}</span
         ><u-icon name="calendar" size="32" />
       </button>
@@ -82,11 +64,6 @@
     <p class="form-note">
       出生信息将用于生成排盘。<a href="/learn/privacy.html">了解隐私政策</a>
     </p>
-    <yx-pillar-picker
-      ref="pillarPicker"
-      :default-value="pillarDefaultValue"
-      @confirm="confirmPillars"
-    />
     <u-picker
       v-model="solarSelectShow"
       :params="timePickerOptions"
@@ -112,15 +89,13 @@ import { GetBook, GetInfo } from "@/api/default";
 import { useDetailStore } from "@/store/detail";
 import { useTendStore } from "@/store/tend";
 import { useBookStore } from "@/store/book";
-import { firstStringToUpperCase, timeFormat } from "@/utils/transform";
+import { timeFormat } from "@/utils/transform";
 import { toDetail } from "@/utils/router";
-import { PILLAR_FIELD } from "@/config/map";
 
 const genderOptions = [
   { value: 1, label: "男" },
   { value: 2, label: "女" },
 ];
-const inputModes = ["公历日期", "四柱输入"];
 const sectOptions = [
   { value: 1, label: "日柱算次日" },
   { value: 2, label: "日柱算当日" },
@@ -136,7 +111,6 @@ const timePickerOptions = {
 const form = reactive({
   realname: "",
   gender: 1,
-  model: 0,
   sect: 1,
   timestamp: null,
 });
@@ -144,7 +118,6 @@ const detailStore = useDetailStore();
 const tendStore = useTendStore();
 const bookStore = useBookStore();
 const solarSelectShow = ref(false);
-const pillarPicker = ref(null);
 const isSubmitting = ref(false);
 const errorMessage = ref("");
 
@@ -168,11 +141,7 @@ const lunarLabel = computed(() =>
   lunar.value ? `${lunar.value.toString()} ${lunar.value.getTimeZhi()}时` : "",
 );
 const dateLabel = computed(() =>
-  form.timestamp === null
-    ? ""
-    : form.model === 0
-      ? timeFormat(new Date(form.timestamp))
-      : lunar.value.getEightChar().toString(),
+  form.timestamp === null ? "" : timeFormat(new Date(form.timestamp)),
 );
 const defaultTime = computed(() => {
   const date = new Date(form.timestamp);
@@ -181,18 +150,6 @@ const defaultTime = computed(() => {
     return "2001-01-01 00:00:00";
   return timeFormat(date, "yyyy-mm-dd hh:MM:ss");
 });
-const pillarDefaultValue = computed(() => {
-  if (!lunar.value) return "";
-  const bazi = lunar.value.getEightChar();
-  return ["Gan", "Zhi"]
-    .flatMap((suffix) =>
-      PILLAR_FIELD.map((field) =>
-        bazi[`get${firstStringToUpperCase(field)}${suffix}`](),
-      ),
-    )
-    .join("");
-});
-
 onLoad((query = {}) => {
   if (query.time) {
     form.timestamp = validTimestamp(query.time);
@@ -217,8 +174,7 @@ onLoad((query = {}) => {
 
 function selectTime() {
   errorMessage.value = "";
-  if (form.model === 0) solarSelectShow.value = true;
-  else pillarPicker.value?.open();
+  solarSelectShow.value = true;
 }
 
 function confirmDate({ year, month, day, hour, minute }) {
@@ -231,11 +187,6 @@ function confirmDate({ year, month, day, hour, minute }) {
       Number(minute),
     ).getTime(),
   );
-}
-
-function confirmPillars(selection) {
-  form.timestamp = validTimestamp(selection.value);
-  pillarPicker.value?.close();
 }
 
 async function submitChart() {
@@ -333,31 +284,8 @@ async function submitChart() {
 .chart-form :deep(.u-radio) {
   margin-right: 16px;
 }
-.input-modes {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
-  background: var(--site-tint);
-  padding: 4px;
-  border-radius: 8px;
-}
-.input-modes button {
-  width: 100%;
-  margin: 0;
-  padding: 7px 12px;
-  background: transparent;
-  color: var(--site-muted);
-  font: 14px/1.6 var(--site-font);
-  border-radius: 6px;
-}
 .chart-form button::after {
   border: 0;
-}
-.input-modes button.is-selected {
-  background: var(--site-surface);
-  color: var(--site-accent);
-  box-shadow: 0 1px 4px #233c3412;
-  font-weight: 600;
 }
 .date-input {
   width: 100%;

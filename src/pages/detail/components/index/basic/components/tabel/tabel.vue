@@ -27,7 +27,11 @@
                 ditem.key === 'gods' ? `u-type-primary` : ''
               ]"
               @click="showTips(ditem.key,citem)"
-          ><view v-if="relationIndex(citem) !== -1" class="deity-icon deity-icon-small" :style="relationSpriteStyle(citem)"></view>{{ citem + (ditem.key==='bottom_hide'?getElAttr(citem,'label'):'') }}</view>
+          >
+            <view v-if="relationIndex(citem) !== -1" class="deity-icon deity-icon-small" :style="relationSpriteStyle(citem)"></view>
+            <view v-if="ditem.key === 'gods'" class="shensha-icon" :style="shenshaSpriteStyle(citem)"></view>
+            {{ citem + (ditem.key==='bottom_hide'?getElAttr(citem,'label'):'') }}
+          </view>
         </view>
       </view>
     </template>
@@ -39,7 +43,9 @@
 import {computed, ref} from 'vue';
 import {useDetailStore} from "@/store/detail";
 import {getElAttr} from "@/utils/transform";
-import {getUrl} from "@/utils/file";
+import {shenshaSpriteStyle} from "@/utils/shensha-art";
+import elementSprite from "@/static/icon/element-new/sprite.png";
+import tenGodSprite from "@/static/icon/ten-gods/sprite.png";
 
 const detailStore = useDetailStore();
 const tips = ref();
@@ -93,7 +99,7 @@ function GetPillarColor(str) {
 function elementSpriteStyle(str) {
   const index = getElAttr(str,'index');
   return {
-    backgroundImage: `url(${getUrl('static/icon/element-new/sprite.png')})`,
+    backgroundImage: `url(${elementSprite})`,
     backgroundPosition: `${index * 25}% 50%`,
   }
 }
@@ -107,7 +113,7 @@ function relationSpriteStyle(label) {
   const column = index % 5;
   const row = Math.floor(index / 5);
   return {
-    backgroundImage: `url(${getUrl('static/icon/ten-gods/sprite.png')})`,
+    backgroundImage: `url(${tenGodSprite})`,
     backgroundPosition: `${column * 25}% ${row * 100}%`,
   }
 }
@@ -147,6 +153,7 @@ function showTips(type,label){
 .term-cell { display:flex; align-items:center; justify-content:center; gap:8rpx; min-height:46rpx; }
 .deity-icon { width:48rpx; height:48rpx; flex:0 0 48rpx; border-radius:50%; background-repeat:no-repeat; background-size:500% 200%; background-color:#f3f6ef; }
 .deity-icon-small { display:inline-block; width:34rpx; height:34rpx; vertical-align:middle; margin-right:4rpx; }
+.shensha-icon { display:inline-block; width:38rpx; height:38rpx; vertical-align:middle; margin-right:5rpx; border-radius:50%; background-color:#f3f6ef; }
 .element-icon { width:46rpx; height:46rpx; flex:0 0 46rpx; border-radius:50%; background-repeat:no-repeat; background-size:500% 100%; background-color:#f5f2e9; }
 @media (max-width: 767px) {
   .deity-icon { width:38rpx; height:38rpx; flex-basis:38rpx; }

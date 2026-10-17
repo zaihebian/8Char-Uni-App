@@ -7,22 +7,13 @@
           ><view class="hero-copy">
             <p class="hero-eyebrow">传统文化，从认识自己开始</p>
             <h1 id="home-title">从一张命盘，<br />认识传统文化</h1>
-            <p class="hero-description">
-              免费排出四柱八字，读懂五行与十神。<br />从基本概念到完整课程，一步步学明白。
-            </p>
             <a class="hero-link" href="/learn/module-0.html"
               >初次接触？从入门课程开始 <span aria-hidden="true">↗</span></a
             >
           </view></view
         >
         <view class="chart-panel">
-          <view class="chart-panel-heading"
-            ><h2>免费四柱排盘</h2>
-            <span>无需注册</span></view
-          >
-          <p class="chart-panel-description">
-            填写出生信息，查看命盘、基础解读并保存报告。
-          </p>
+          <view class="chart-panel-heading"><h2>免费四柱排盘</h2></view>
           <sheet />
         </view>
       </section>
@@ -152,12 +143,6 @@ const courses = [
   color: #233c34;
   margin: 0 0 20px;
 }
-.hero-description {
-  font-size: 15px;
-  line-height: 1.9;
-  color: #52635a;
-  margin: 0 0 26px;
-}
 .hero-link {
   font-size: 14px;
   font-weight: 600;
@@ -179,18 +164,6 @@ const courses = [
   font-size: 23px;
   font-weight: 600;
   margin: 0;
-}
-.chart-panel-heading > span {
-  font-size: 12px;
-  color: var(--site-accent);
-  background: var(--site-tint);
-  padding: 3px 10px;
-  border-radius: 6px;
-}
-.chart-panel-description {
-  color: var(--site-muted);
-  font-size: 13px;
-  margin: 6px 0 24px;
 }
 .learning-section {
   margin-top: 40px;
@@ -345,10 +318,6 @@ const courses = [
     font-size: 11px;
     letter-spacing: 2px;
   }
-  .hero-description {
-    font-size: 14px;
-    margin-bottom: 16px;
-  }
   .hero-link {
     font-size: 13px;
   }
@@ -357,9 +326,6 @@ const courses = [
   }
   .chart-panel h2 {
     font-size: 21px;
-  }
-  .chart-panel-description {
-    margin-bottom: 20px;
   }
   .learning-section {
     margin-top: 30px;

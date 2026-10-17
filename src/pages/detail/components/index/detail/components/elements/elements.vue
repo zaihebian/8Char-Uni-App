@@ -46,7 +46,7 @@ import {ref, computed} from 'vue';
 import ProDecl from '../../../common/pro-decl/pro-decl.vue';
 import {useDetailStore} from "@/store/detail";
 import {ELEMENT} from "@/config/map";
-import {getUrl} from "@/utils/file";
+import elementSprite from "@/static/icon/element-new/sprite.png";
 
 const detailStore = useDetailStore();
 const colors = ELEMENT.colors;
@@ -59,7 +59,7 @@ const els = computed(()=>{
 
 function elementStyle(index) {
   return {
-    backgroundImage: `url(${getUrl('static/icon/element-new/sprite.png')})`,
+    backgroundImage: `url(${elementSprite})`,
     backgroundPosition: `${index * 25}% 50%`,
   }
 }

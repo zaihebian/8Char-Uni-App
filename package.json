@@ -8,7 +8,7 @@
 	"scripts": {
 		"dev:app": "uni -p app --mode development",
 		"dev:custom": "uni -p --mode development",
-		"dev:h5": "uni --mode development",
+		"dev:h5": "node scripts/copy-learning-pages.mjs --source-only && uni --mode development",
 		"dev:h5:ssr": "uni --ssr --mode development",
 		"dev:mp-alipay": "uni -p mp-alipay --mode development",
 		"dev:mp-baidu": "uni -p mp-baidu --mode development",

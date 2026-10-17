@@ -2,7 +2,7 @@
   <header class="web-header">
     <nav class="web-nav site-shell" aria-label="网站导航">
       <a class="web-brand" href="/"
-        >国学经典<span>传统文化学习与互动体验</span></a
+        >国学经典<span>中华古籍｜传统文化｜互动体验</span></a
       >
       <button
         class="web-menu-button"
@@ -17,9 +17,7 @@
         <a href="/" :aria-current="active === 'chart' ? 'page' : undefined"
           >免费排盘</a
         >
-        <a href="/learn/">国学知识</a><a href="/learn/module-0.html">入门课程</a
-        ><a href="/learn/basics/">概念库</a
-        ><a href="/learn/about.html">关于本站</a>
+        <a href="/learn/">国学知识</a><a href="/learn/about.html">关于本站</a>
       </view>
     </nav>
   </header>
