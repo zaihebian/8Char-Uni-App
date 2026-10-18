@@ -11,6 +11,7 @@ import { join, relative } from "node:path";
 const output = join(process.cwd(), "dist", "build", "h5");
 const source = join(process.cwd(), "public", "learn");
 const sourceOnly = process.argv.includes("--source-only");
+const siteOrigin = "https://coinslotclub.online";
 
 if (!existsSync(source) || (!sourceOnly && !existsSync(output))) {
   throw new Error("H5 build output or learning pages are missing.");
@@ -38,16 +39,23 @@ const topicLinks = [
 ];
 const footer = `<footer class="site-footer"><div class="wrap"><div><h4>国学经典</h4><p>了解传统概念，也保留独立思考。</p></div><div class="footer-links"><a href="/learn/about.html">关于本站</a><a href="/learn/privacy.html">隐私政策</a><a href="https://github.com/zaihebian/8Char-Uni-App/issues" target="_blank" rel="noopener">反馈建议</a></div><div class="copy">© <span id="yr">${new Date().getFullYear()}</span> 国学经典。内容仅供传统文化学习与参考。</div></div></footer>`;
 
-function renderPages(directory, learnRoot) {
+function publicRoute(filePath, learnRoot) {
+  const relativePath = relative(learnRoot, filePath).replaceAll("\\", "/");
+  if (relativePath === "index.html") return "/learn/";
+  return "/learn/" + relativePath.replace(/index\.html$/, "");
+}
+
+function renderPages(directory, learnRoot, routes) {
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
     const path = join(directory, entry.name);
     if (entry.isDirectory()) {
-      renderPages(path, learnRoot);
+      renderPages(path, learnRoot, routes);
       continue;
     }
     if (!entry.name.endsWith(".html")) continue;
-    const route =
-      "/learn/" + relative(learnRoot, path).replaceAll("\\", "/");
+    const route = "/learn/" + relative(learnRoot, path).replaceAll("\\", "/");
+    const canonicalRoute = publicRoute(path, learnRoot);
+    routes.push(canonicalRoute);
     const isArticle = !route.endsWith("/index.html");
     const activeMain = route.endsWith("/about.html")
       ? "/learn/about.html"
@@ -56,6 +64,12 @@ function renderPages(directory, learnRoot) {
       `<a class="navlink${active ? " active" : ""}" href="${href}"${active ? ' aria-current="page"' : ""}>${label}</a>`;
     const header = `<header class="site-header"><nav class="nav" aria-label="网站导航"><a class="brand" href="/">国学经典<small>中华古籍｜传统文化｜互动体验</small></a><button class="nav-toggle" aria-label="展开网站栏目" aria-expanded="false" aria-controls="site-links">浏览栏目 ☰</button><div class="links" id="site-links">${mainLinks.map((link) => renderLink(link, link[0] === activeMain)).join("")}</div></nav></header><nav class="topic-nav wrap" aria-label="知识分类">${topicLinks.map((link) => renderLink(link, link[0] === "/learn/" ? route === "/learn/index.html" : route.startsWith(link[0]))).join("")}</nav>`;
     let html = readFileSync(path, "utf8");
+    if (!sourceOnly && !html.includes('rel="canonical"')) {
+      html = html.replace(
+        "</head>",
+        `<link rel="canonical" href="${siteOrigin}${canonicalRoute}">\n</head>`,
+      );
+    }
     html = html
       .replace(
         /<header class="site-header">[\s\S]*?<\/header>(?:<nav class="topic-nav wrap"[\s\S]*?<\/nav>)?/,
@@ -70,7 +84,15 @@ function renderPages(directory, learnRoot) {
   }
 }
 const target = sourceOnly ? source : join(output, "learn");
-renderPages(target, target);
+const routes = [];
+renderPages(target, target, routes);
+if (!sourceOnly) {
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${["/", ...routes]
+    .sort()
+    .map((route) => `  <url><loc>${siteOrigin}${route}</loc></url>`)
+    .join("\n")}\n</urlset>\n`;
+  writeFileSync(join(output, "sitemap.xml"), sitemap);
+}
 console.log(
   sourceOnly
     ? "Synchronized navigation in source learning pages."
