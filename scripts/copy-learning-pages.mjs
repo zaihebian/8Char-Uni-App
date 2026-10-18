@@ -12,6 +12,7 @@ const output = join(process.cwd(), "dist", "build", "h5");
 const source = join(process.cwd(), "public", "learn");
 const sourceOnly = process.argv.includes("--source-only");
 const siteOrigin = "https://coinslotclub.online";
+const adsenseScript = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9743802431901928" crossorigin="anonymous"></script>';
 
 if (!existsSync(source) || (!sourceOnly && !existsSync(output))) {
   throw new Error("H5 build output or learning pages are missing.");
@@ -21,6 +22,7 @@ if (!sourceOnly) {
   mkdirSync(join(output, "learn"), { recursive: true });
   cpSync(source, join(output, "learn"), { recursive: true });
   cpSync(join(process.cwd(), "public", "robots.txt"), join(output, "robots.txt"));
+  cpSync(join(process.cwd(), "public", "ads.txt"), join(output, "ads.txt"));
 }
 
 // Render shared navigation at build time so every knowledge page remains crawlable
@@ -64,6 +66,9 @@ function renderPages(directory, learnRoot, routes) {
       `<a class="navlink${active ? " active" : ""}" href="${href}"${active ? ' aria-current="page"' : ""}>${label}</a>`;
     const header = `<header class="site-header"><nav class="nav" aria-label="网站导航"><a class="brand" href="/">国学经典<small>中华古籍｜传统文化｜互动体验</small></a><button class="nav-toggle" aria-label="展开网站栏目" aria-expanded="false" aria-controls="site-links">浏览栏目 ☰</button><div class="links" id="site-links">${mainLinks.map((link) => renderLink(link, link[0] === activeMain)).join("")}</div></nav></header><nav class="topic-nav wrap" aria-label="知识分类">${topicLinks.map((link) => renderLink(link, link[0] === "/learn/" ? route === "/learn/index.html" : route.startsWith(link[0]))).join("")}</nav>`;
     let html = readFileSync(path, "utf8");
+    if (!sourceOnly && !html.includes("pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")) {
+      html = html.replace("</head>", `${adsenseScript}\n</head>`);
+    }
     if (!sourceOnly && !html.includes('rel="canonical"')) {
       html = html.replace(
         "</head>",
@@ -96,5 +101,5 @@ if (!sourceOnly) {
 console.log(
   sourceOnly
     ? "Synchronized navigation in source learning pages."
-    : "Copied learning pages and robots.txt into H5 output.",
+    : "Copied learning pages, robots.txt, and ads.txt into H5 output.",
 );
