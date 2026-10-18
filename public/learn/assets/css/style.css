@@ -185,6 +185,31 @@ section {
 .editorial-list li + li {
   margin-top: 8px;
 }
+.author-expansion {
+  margin: 28px 0 24px;
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, #fffdf8, #f7faf6);
+  box-shadow: var(--shadow);
+}
+.author-expansion h2,
+.author-expansion h3 {
+  font-family: var(--serif);
+  color: var(--brand-deep);
+  margin: 0 0 8px;
+}
+.author-expansion h2 {
+  font-size: 22px;
+}
+.author-expansion h3 {
+  font-size: 17px;
+  margin-top: 18px;
+}
+.author-expansion p {
+  margin: 0;
+  color: var(--ink);
+}
 
 /* ---------- 面包屑 ---------- */
 .crumb {
