@@ -12,6 +12,8 @@ import { expansionFor } from "./learning-expansions.mjs";
 
 const output = join(process.cwd(), "dist", "build", "h5");
 const source = join(process.cwd(), "public", "learn");
+const shenshaAssetSource = join(process.cwd(), "src", "static", "icon", "shensha", "individual");
+const shenshaAssetTarget = join(source, "assets", "images", "shensha");
 const sourceOnly = process.argv.includes("--source-only");
 const siteOrigin = "https://coinslotclub.online";
 const adsenseScript = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9743802431901928" crossorigin="anonymous"></script>';
@@ -25,6 +27,17 @@ if (!sourceOnly) {
   cpSync(source, join(output, "learn"), { recursive: true });
   cpSync(join(process.cwd(), "public", "robots.txt"), join(output, "robots.txt"));
   cpSync(join(process.cwd(), "public", "ads.txt"), join(output, "ads.txt"));
+}
+
+// Keep the original 800px transparent shensha portraits available to the
+// static knowledge pages. The H5 build already contains these source assets;
+// copying them here gives the article pages one stable, crawlable URL.
+if (existsSync(shenshaAssetSource)) {
+  mkdirSync(shenshaAssetTarget, { recursive: true });
+  cpSync(shenshaAssetSource, shenshaAssetTarget, { recursive: true });
+  if (!sourceOnly) {
+    cpSync(shenshaAssetTarget, join(output, "learn", "assets", "images", "shensha"), { recursive: true });
+  }
 }
 
 // Render shared navigation at build time so every knowledge page remains crawlable
@@ -43,6 +56,24 @@ const topicLinks = [
 ];
 const footer = `<footer class="site-footer"><div class="wrap"><div><h4>国学经典</h4><p>了解传统概念，也保留独立思考。</p></div><div class="footer-links"><a href="/learn/about.html">关于本站</a><a href="/learn/privacy.html">隐私政策</a><a href="https://github.com/zaihebian/8Char-Uni-App/issues" target="_blank" rel="noopener">反馈建议</a></div><div class="copy">© <span id="yr">${new Date().getFullYear()}</span> 国学经典。内容仅供传统文化学习与参考。</div></div></footer>`;
 const updatedAt = "2026-10-18";
+
+const shenshaImageByArticle = {
+  "fuxing.html": 7,
+  "huagai.html": 8,
+  "kongwang.html": 13,
+  "sanqi.html": 6,
+  "shi-e-da-bai.html": 13,
+  "sifei.html": 12,
+  "taiji.html": 3,
+  "taohua.html": 10,
+  "tiande-yuede.html": 5,
+  "tiangong.html": 7,
+  "tianluo-diwang.html": 14,
+  "tianyi.html": 2,
+  "wenzhang.html": 1,
+  "yangren.html": 11,
+  "yima.html": 9,
+};
 
 function publicRoute(filePath, learnRoot) {
   const relativePath = relative(learnRoot, filePath).replaceAll("\\", "/");
@@ -69,6 +100,14 @@ function renderPages(directory, learnRoot, routes) {
       `<a class="navlink${active ? " active" : ""}" href="${href}"${active ? ' aria-current="page"' : ""}>${label}</a>`;
     const header = `<header class="site-header"><nav class="nav" aria-label="网站导航"><a class="brand" href="/">国学经典<small>中华古籍｜传统文化｜互动体验</small></a><button class="nav-toggle" aria-label="展开网站栏目" aria-expanded="false" aria-controls="site-links">浏览栏目 ☰</button><div class="links" id="site-links">${mainLinks.map((link) => renderLink(link, link[0] === activeMain)).join("")}</div></nav></header><nav class="topic-nav wrap" aria-label="知识分类">${topicLinks.map((link) => renderLink(link, link[0] === "/learn/" ? route === "/learn/index.html" : route.startsWith(link[0]))).join("")}</nav>`;
     let html = readFileSync(path, "utf8");
+    if (relative(learnRoot, path).startsWith("shensha/") && shenshaImageByArticle[entry.name]) {
+      const imageIndex = shenshaImageByArticle[entry.name];
+      const articleTitle = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i)?.[1]
+        ?.replace(/<[^>]+>/g, "")
+        .trim() || "神煞";
+      const portrait = `<figure class="shensha-portrait"><img src="/learn/assets/images/shensha/${imageIndex}.png" width="800" height="800" loading="lazy" decoding="async" alt="${articleTitle}神煞小像"><figcaption>${articleTitle} · 神煞意象</figcaption></figure>`;
+      html = html.replace(/<figure class="svgfig">[\s\S]*?<\/figure>/i, portrait);
+    }
     if (!sourceOnly && !html.includes("pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")) {
       html = html.replace("</head>", `${adsenseScript}\n</head>`);
     }
@@ -129,4 +168,3 @@ console.log(
     ? "Synchronized navigation in source learning pages."
     : "Copied learning pages, robots.txt, and ads.txt into H5 output.",
 );
-
