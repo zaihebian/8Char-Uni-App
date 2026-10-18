@@ -477,6 +477,28 @@ figure.svgfig figcaption {
   margin-top: 10px;
 }
 
+figure.shensha-portrait {
+  margin: 18px 0;
+  padding: 18px;
+  background: linear-gradient(145deg, #fbfcf8, #f1f5ef);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  text-align: center;
+}
+figure.shensha-portrait img {
+  display: block;
+  width: min(100%, 360px);
+  height: auto;
+  max-height: 360px;
+  margin: 0 auto;
+  object-fit: contain;
+}
+figure.shensha-portrait figcaption {
+  margin-top: 8px;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
 /* ---------- 分寸 / 提示框 ---------- */
 .note {
   border-left: 4px solid var(--brand);
@@ -1250,4 +1272,3 @@ button:focus-visible {
     padding: 22px 92px 22px 20px;
   }
 }
-
