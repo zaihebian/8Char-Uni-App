@@ -52,3 +52,6 @@ backend-example/node_modules/
 # Browser verification artifacts
 .playwright-cli/
 output/playwright/
+
+# Generated static knowledge-page artwork copied from src/static during builds
+public/learn/assets/images/shensha/
