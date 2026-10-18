@@ -1,0 +1,93 @@
+const sourceByPath = {
+  "basics/wuxing.html": "卷一〈论五行所生之始〉、〈五行法总诀〉",
+  "basics/tiangan.html": "卷一〈论天干地支所出〉、〈论天干生旺〉",
+  "basics/dizhi.html": "卷一〈论天干地支所出〉、〈论地支〉相关条目",
+  "basics/liushijiazi.html": "卷一〈论六十花甲子并注解〉",
+  "basics/naying.html": "卷一〈论六十花甲子并注解〉",
+  "basics/changsheng.html": "卷一〈五行法总诀〉、〈论天干生旺〉",
+  "basics/dayun.html": "卷一〈论大运〉",
+  "basics/taisui.html": "卷一〈论太岁吉凶〉",
+  "basics/yongshen.html": "卷一〈论五行相生相克〉及卷末取用相关篇目",
+  "basics/xiji.html": "卷一〈论五行相生相克〉及喜忌相关篇目",
+  "basics/shenqiang-shenruo.html": "卷一五行生克、旺衰与行运相关篇目",
+  "basics/liuqin.html": "卷三六亲、父母、夫妻与子女相关篇目",
+  "basics/kan-bazi.html": "卷一〈论八字撮要法〉、〈格局生死引〉",
+  "ten-gods/bijian.html": "卷二〈论比肩〉",
+  "ten-gods/jiecai.html": "卷二〈论劫财〉",
+  "ten-gods/shishen.html": "卷二〈论食神〉、〈论倒食〉",
+  "ten-gods/shangguan.html": "卷二〈论伤官〉",
+  "ten-gods/zhengcai.html": "卷二〈论正财〉",
+  "ten-gods/piancai.html": "卷二〈论偏财〉",
+  "ten-gods/zhengguan.html": "卷二〈论正官〉",
+  "ten-gods/qisha.html": "卷二〈论七杀〉",
+  "ten-gods/zhengyin.html": "卷二〈论印绶〉",
+  "ten-gods/pianyin.html": "卷二〈论倒食〉、〈论印绶〉",
+  "shensha/tianyi.html": "卷一〈起玉堂天乙贵人〉",
+  "shensha/tiangong.html": "卷一〈起天官贵人〉",
+  "shensha/taiji.html": "卷一〈起太极贵人〉",
+  "shensha/sanqi.html": "卷一〈论三奇贵人〉",
+  "shensha/tiande-yuede.html": "卷一〈论月德贵人〉、〈论天德贵人〉",
+  "shensha/fuxing.html": "卷一〈论福星贵人〉",
+  "shensha/yima.html": "卷一〈论驿马〉",
+  "shensha/huagai.html": "卷一〈论华盖〉",
+  "shensha/taohua.html": "卷一桃花、咸池相关查法",
+  "shensha/wenzhang.html": "卷一文昌、学堂相关查法",
+  "shensha/yangren.html": "卷一〈论羊刃〉",
+  "shensha/kongwang.html": "卷一空亡相关查法与行运条目",
+  "shensha/sifei.html": "卷一〈论四废亡〉",
+  "shensha/shi-e-da-bai.html": "卷一〈论十恶大败日〉",
+  "shensha/tianluo-diwang.html": "卷一〈论天罗地网〉",
+  "geju/zhengguan.html": "卷二正官格、正官论相关篇目",
+  "geju/qisha.html": "卷二七杀格、七杀论相关篇目",
+  "geju/zhengyin.html": "卷二印绶格相关篇目",
+  "geju/pianyin.html": "卷二倒食、偏印格相关篇目",
+  "geju/zhengcai.html": "卷二正财格相关篇目",
+  "geju/piancai.html": "卷二偏财格相关篇目",
+  "geju/shishen.html": "卷二食神格、倒食相关篇目",
+  "geju/shangguan.html": "卷二伤官格相关篇目",
+  "geju/jianlu.html": "卷二建禄、月刃相关篇目",
+  "geju/yangren.html": "卷二羊刃格相关篇目",
+  "geju/kuigang.html": "卷二〈论魁罡〉",
+  "geju/conge.html": "卷二〈论从革〉及外十八格",
+  "geju/quzhi.html": "卷二曲直格相关篇目",
+  "geju/yanshang.html": "卷二炎上格相关篇目",
+  "geju/runxia.html": "卷二润下格相关篇目",
+  "geju/jiashe.html": "卷二稼穑格相关篇目",
+  "geju/huaqi.html": "卷二化气格相关篇目",
+  "geju/congcai.html": "卷二弃命从财格、外十八格",
+  "geju/congsha.html": "卷二弃命从杀格、外十八格",
+  "geju/feitian-luma.html": "卷二飞天禄马、外十八格",
+  "geju/liuyi-shugui.html": "卷二六乙鼠贵、外十八格",
+  "geju/ziyao-si.html": "卷二子遥巳、外十八格",
+  "geju/renqi-longbei.html": "卷二壬骑龙背、外十八格",
+  "geju/tianyuan-yiqi.html": "卷二天元一气、外十八格",
+  "geju/ride.html": "卷二日德格相关篇目",
+  "geju/rigui.html": "卷二日贵格相关篇目",
+};
+
+const focusByGroup = {
+  basics: "先看定义，再看它在四柱中的位置；单独出现的术语不能脱离月令、日主和整体组合下结论。",
+  "ten-gods": "这里把十神当作关系语言来读：先确认生克与阴阳，再观察它和日主、月令、财官印食之间怎样连成结构。",
+  shensha: "神煞只适合做辅助线索，查法必须先核对日干、年支或日支的取法，再回到完整命盘验证，不把一个名称当成结论。",
+  geju: "格局不是看到一个字就成立。先看月令和透干，再检查是否有破格、制化与行运，最后才讨论格局的取用。",
+};
+const guideByGroup = {
+  basics: "核对顺序建议是：先记住术语的范围，再看它和月令、日主及其他干支的关系；不要只凭“旺”“弱”“缺”其中一个标签下结论。",
+  "ten-gods": "核对顺序建议是：先由日主确定生克和阴阳，再分辨透干、藏支、得令与制化；相同十神落在不同柱位，阅读重点也会不同。",
+  shensha: "核对顺序建议是：先按页面给出的查法定位，再看它是否得到生扶、是否被冲合，以及命局里有没有同类信息相互印证；孤立的神煞不承担断语。",
+  geju: "核对顺序建议是：先看月令是否真的成格，再看透干、根气、制化和岁运；如果条件不齐，应把它当作一个观察角度，而不是硬套格名。",
+};
+
+export function editorialFor(relativePath, title) {
+  const source = sourceByPath[relativePath] || "《渊海子平》相关篇目";
+  const group = relativePath.split("/")[0];
+  return {
+    source,
+    focus: focusByGroup[group] || "阅读时请把术语放回完整命盘与上下文中核对。",
+    guide: guideByGroup[group] || "阅读时请把术语放回完整命盘与上下文中核对，再与相邻概念交叉阅读。",
+    title,
+  };
+}
+
+export const sourceCount = Object.keys(sourceByPath).length;
+
