@@ -8,6 +8,7 @@ import {
 } from "node:fs";
 import { join, relative } from "node:path";
 import { editorialFor } from "./learning-editorial.mjs";
+import { expansionFor } from "./learning-expansions.mjs";
 
 const output = join(process.cwd(), "dist", "build", "h5");
 const source = join(process.cwd(), "public", "learn");
@@ -93,9 +94,16 @@ function renderPages(directory, learnRoot, routes) {
         .trim() || "传统文化概念";
       const relativeArticlePath = relative(learnRoot, path).replaceAll("\\", "/");
       const editorial = editorialFor(relativeArticlePath, heading);
+      const expansion = expansionFor(relativeArticlePath);
       const editorialMeta = `<aside class="editorial-meta" aria-label="文章资料信息"><div><strong>作者</strong><span>白文涛</span></div><div><strong>参考</strong><a href="/learn/editorial.html">${editorial.source}</a></div><div><strong>更新</strong><time datetime="${updatedAt}">${updatedAt}</time></div></aside><div class="editorial-note"><strong>白文涛的阅读提示</strong><p>${editorial.focus}</p><p>${editorial.guide}</p><p class="editorial-link"><a href="/learn/editorial.html">查看编校方法与完整资料说明 →</a></p></div>`;
+      const expansionBlock = `<section class="author-expansion" aria-label="白文涛补充解读"><h2>白文涛补充解读</h2><p>${expansion.specific}</p><h3>把它放回实际阅读</h3><p>${expansion.exercise}</p><p>${expansion.context}</p></section>`;
       if (!html.includes("class=\"editorial-meta\"")) {
         html = html.replace(/(<(?:h1|h2)[^>]*>[\s\S]*?<\/(?:h1|h2)>)/i, `$1${editorialMeta}`);
+      }
+      if (!html.includes("class=\"author-expansion\"")) {
+        html = html.includes('<div class="relbox">')
+          ? html.replace('<div class="relbox">', `${expansionBlock}<div class="relbox">`)
+          : html.replace("</section>", `${expansionBlock}</section>`);
       }
       html = html
         .replace(/<meta name="author"[^>]*>\s*/gi, "")
